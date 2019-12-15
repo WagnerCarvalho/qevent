@@ -1,4 +1,4 @@
-package com.qmenu.app
+package com.qagile.qmenu
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
