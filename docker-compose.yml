@@ -1,6 +1,21 @@
 version: '3.1'
 
 services:
+  mongo:
+    image: mongo:3.2.4
+    ports:
+      - 27017:27017
+    command: --smallfiles
+
+  mongo-client:
+    image: mongoclient/mongoclient
+    ports:
+      - 3030:3000
+    environment:
+      - MONGOCLIENT_DEFAULT_CONNECTION_URL=mongodb://mongo:27017
+    links:
+      - mongo
+
   springboot:
     build: .
     restart: always
@@ -10,11 +25,3 @@ services:
     working_dir: /code
     depends_on:
       - mongo
-
-  mongo:
-    image: mongo
-    container_name: springboot-mongo
-    volumes:
-      - $HOME/data/springboot-mongo-data:/data/db
-      - $HOME/data/springboot-mongo-bkp:/data/bkp
-    restart: always
