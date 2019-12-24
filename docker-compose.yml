@@ -2,26 +2,12 @@ version: '3.1'
 
 services:
   mongo:
-    image: mongo:3.2.4
-    ports:
-      - 27017:27017
-    command: --smallfiles
-
-  mongo-client:
-    image: mongoclient/mongoclient
-    ports:
-      - 3030:3000
-    environment:
-      - MONGOCLIENT_DEFAULT_CONNECTION_URL=mongodb://mongo:27017
-    links:
-      - mongo
-
-  springboot:
-    build: .
+    image: mongo
     restart: always
-    container_name: springboot
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: mongo
+#      MONGO_INITDB_ROOT_PASSWORD: RA6XdvZLNp
     ports:
-      - 8182:8080
-    working_dir: /code
-    depends_on:
-      - mongo
+      - "27017:27017"
+    volumes:
+      - /tmp/mongo_data:/data/db
