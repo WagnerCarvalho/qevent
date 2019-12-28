@@ -3,6 +3,8 @@ package com.qagile.qmenu.api.service
 import com.qagile.qmenu.api.domain.Company
 import com.qagile.qmenu.api.domain.CompanyLocation
 import com.qagile.qmenu.api.domain.CompanyPlace
+import java.lang.Exception
+import java.util.Optional
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
-import java.lang.Exception
-import java.util.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
@@ -24,8 +24,8 @@ class CompanyServiceTest {
 
     fun getCompany(name: String, description: String): Company {
         val companyLocation = CompanyLocation(lat = -23.4954556, lng = -46.6406668)
-        val companyAddress = CompanyPlace(address = "Rua Copacabana 160, Casa 08", neighborhood="Santana",
-            city="São Paulo", state = "SP", location = companyLocation)
+        val companyAddress = CompanyPlace(address = "Rua Copacabana 160, Casa 08", neighborhood = "Santana",
+            city = "São Paulo", state = "SP", location = companyLocation)
 
         return Company(applicationUserId = 1, name = name, description = description,
             email = "eletrosho@eletrosho.com.br", place = companyAddress)

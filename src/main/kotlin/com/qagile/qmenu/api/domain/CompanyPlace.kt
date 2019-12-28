@@ -2,7 +2,7 @@ package com.qagile.qmenu.api.domain
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class CompanyPlace (
+data class CompanyPlace(
 
     @JsonProperty("address")
     val address: String = "",

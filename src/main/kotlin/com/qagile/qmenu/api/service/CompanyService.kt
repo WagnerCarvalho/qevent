@@ -10,7 +10,6 @@ import io.reactivex.Single.just
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class CompanyService {
@@ -62,7 +61,7 @@ class CompanyService {
                 logger.info("End deleteCompany, company: $it")
             }.doOnError {
                 logger.info("Error saveCompany, error: $it")
-            }.onErrorResumeNext{
+            }.onErrorResumeNext {
                 Single.error(CompanyException("400", Translator.getMessage(ErrorCode.COMPANY_DOES_NOT_EXIST)))
             }
     }
@@ -73,12 +72,3 @@ class CompanyService {
 
     private fun delete(company: Company) = just(companyRepository.delete(company))
 }
-
-
-
-
-
-
-
-
-
