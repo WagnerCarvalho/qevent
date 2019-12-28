@@ -19,7 +19,7 @@ class EventService {
     @Autowired
     private lateinit var eventRepository: EventRepository
 
-    fun checkEvent(createEventRequest: CreateEventRequest, applicationUserId: Long): Single<Event>{
+    fun checkEvent(createEventRequest: CreateEventRequest, applicationUserId: Long): Single<Event> {
         logger.info("Start checkEvent, createEventRequest: $createEventRequest")
 
         val events = Event()

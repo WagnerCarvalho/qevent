@@ -5,13 +5,13 @@ import com.qagile.qmenu.api.entities.request.CreateEventRequest
 import com.qagile.qmenu.api.routers.EventRouter
 import com.qagile.qmenu.api.service.EventService
 import com.qagile.qmenu.api.utils.toFutureResponse
+import java.util.concurrent.Future
+import javax.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
-import java.util.concurrent.Future
-import javax.validation.Valid
 
 @RestController
 class EventController {

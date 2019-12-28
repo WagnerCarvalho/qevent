@@ -47,7 +47,7 @@ class EventServiceTest {
         try {
             eventService.updateCompany(newCompany).toFuture().get()
         } catch (ex: Exception) {
-            Assert.assertEquals("com.qagile.qmenu.api.entities.CompanyException: O evento não está cadastrado!", ex.message)
+            Assert.assertEquals("com.qagile.qmenu.api.entities.EventException: O evento não está cadastrado!", ex.message)
         }
     }
 

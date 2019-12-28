@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class CreateEventRequest (
+data class CreateEventRequest(
 
     @field:NotNull
     @field:NotEmpty
