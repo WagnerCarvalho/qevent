@@ -20,7 +20,7 @@ class EventController {
     private lateinit var eventService: EventService
 
     @PostMapping(EventRouter.CREATE_EVENT_V1)
-    fun createCompanyV1(
+    fun createEventV1(
         @Valid @RequestBody createEventRequest: CreateEventRequest,
         @RequestHeader(value = "USER_ID") applicationUserId: Long
     ): Future<Event> {
