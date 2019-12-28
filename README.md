@@ -26,16 +26,15 @@ $ ./gradlew bootRun -Dspring.profiles.active=local
 $ ./gradlew ktFormat
 ```
 
-
 ##EndPoints
-#Test Ping Application
+Test Ping Application
 ```
 curl -v -X GET -H "Accept: application/json" -H "Content-Type: application/json" "http://localhost:8080/ping"
 ```
 
-#Test Ping createEventV1
+Test Ping createEventV1
 ```
-curl -v -X POST -H "Accept: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/create-event" -d{JSON}
+curl -v -X POST -H "Accept: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/create-event" -d'{JSON}'
 ```
 
 ```
