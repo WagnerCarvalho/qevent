@@ -2,7 +2,7 @@ package com.qagile.qmenu.api.domain
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class CompanyPlace(
+data class EventPlace(
 
     @JsonProperty("address")
     val address: String = "",
@@ -17,5 +17,5 @@ data class CompanyPlace(
     val state: String = "",
 
     @JsonProperty("location")
-    val location: CompanyLocation = CompanyLocation()
+    val location: EventLocation = EventLocation()
 )

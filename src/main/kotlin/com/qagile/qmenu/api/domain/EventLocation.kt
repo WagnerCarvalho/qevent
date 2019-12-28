@@ -2,7 +2,7 @@ package com.qagile.qmenu.api.domain
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class CompanyLocation(
+data class EventLocation(
     @JsonProperty("lat")
     val lat: Double = 0.0,
 

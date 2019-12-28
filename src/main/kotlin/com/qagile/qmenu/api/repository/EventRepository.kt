@@ -1,11 +1,11 @@
 package com.qagile.qmenu.api.repository
 
-import com.qagile.qmenu.api.domain.Company
+import com.qagile.qmenu.api.domain.Event
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CompanyRepository : MongoRepository <Company, String> {
+interface EventRepository : MongoRepository <Event, String> {
 
-    fun findByEmail(email: String): MutableList<Company>
+    fun findByEmail(email: String): MutableList<Event>
 }
