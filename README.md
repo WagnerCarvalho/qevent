@@ -26,7 +26,7 @@ $ ./gradlew bootRun -Dspring.profiles.active=local
 $ ./gradlew ktFormat
 ```
 
-##EndPoints
+## EndPoints
 ```
 Test Ping Application
 curl -v -X GET -H "Accept: application/json" -H "Content-Type: application/json" "http://localhost:8080/ping"
