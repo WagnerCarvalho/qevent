@@ -3,6 +3,8 @@ package com.qagile.qmenu.api.service
 import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.entities.EventException
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
+import com.qagile.qmenu.api.entities.request.DeleteEventRequest
+import com.qagile.qmenu.api.entities.response.DeleteEventResponse
 import com.qagile.qmenu.api.repository.EventRepository
 import com.qagile.qmenu.api.utils.ErrorCode
 import com.qagile.qmenu.api.utils.Translator
@@ -19,7 +21,12 @@ class EventService {
     @Autowired
     private lateinit var eventRepository: EventRepository
 
-    fun checkEvent(createEventRequest: CreateEventRequest, applicationUserId: Long): Single<Event> {
+    fun checkRemoveEvent(deleteEventRequest: DeleteEventRequest, applicationUserId: Long): Single<DeleteEventResponse> {
+
+        return removeEvent(Event(deleteEventRequest.id), applicationUserId)
+    }
+
+    fun checkCreateEvent(createEventRequest: CreateEventRequest, applicationUserId: Long): Single<Event> {
         logger.info("Start checkEvent, createEventRequest: $createEventRequest")
 
         val events = Event()
@@ -27,60 +34,60 @@ class EventService {
             .doOnSuccess {
                 logger.info("End checkEvent to Feed Send Elastic Search - event: $it")
             }.doOnError {
-                logger.error("Error checkEvent - saveCompany error: $it")
+                logger.error("Error checkEvent - saveEvent error: $it")
             }
     }
 
     fun updateEvent(newEvent: Event): Single<Event> {
-        logger.info("Start updateCompany, newCompany: $newEvent")
+        logger.info("Start updateEvent, newEvent: $newEvent")
 
-        return findById(newEvent)
+        return findById(newEvent.id!!)
             .filter {
                 it.isPresent
             }.flatMapSingle {
                 save(newEvent.mergeDataCompany(newEvent, it.get()))
             }.doOnSuccess {
-                logger.info("End updateCompany, newCompany: $it")
+                logger.info("End updateEvent, newEvent: $it")
             }.doOnError {
-                logger.info("Error updateCompany, error: $it")
+                logger.info("Error updateEvent, error: $it")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
     }
 
     fun saveEvent(event: Event): Single<Event> {
-        logger.info("Start saveCompany, company: $event")
+        logger.info("Start saveEvent,  event: $event")
 
         return save(event)
             .doOnSuccess {
-                logger.info("End saveCompany, company: $it")
+                logger.info("End saveEvent, company: $it")
             }.doOnError {
-                logger.info("Error saveCompany, error: $it")
+                logger.info("Error saveEvent, error: $it")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_TRY_AGAIN_LATER)))
             }
     }
 
-    fun deleteEvent(event: Event): Single<Unit> {
-        logger.info("Start deleteCompany, company: $event")
+    fun removeEvent(event: Event, applicationUserId: Long): Single<DeleteEventResponse> {
+        logger.info("Start deleteEvent, event: $event")
 
-        return findById(event)
+        return findById(event.id!!)
             .filter {
                 it.isPresent
             }.flatMapSingle {
-                delete(it.get())
+                remove(it.get()).map { DeleteEventResponse().getDeleteEventResponse(event.id, applicationUserId) }
             }.doOnSuccess {
-                logger.info("End deleteCompany, company: $it")
+                logger.info("End deleteEvent, event: $it")
             }.doOnError {
-                logger.info("Error saveCompany, error: $it")
+                logger.info("Error deleteEvent, error: $it")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
     }
 
-    fun findById(event: Event) = just(eventRepository.findById(event.id!!))
+    fun findById(id: String) = just(eventRepository.findById(id))
 
     private fun save(event: Event) = just(eventRepository.save(event))
 
-    private fun delete(event: Event) = just(eventRepository.delete(event))
+    private fun remove(event: Event) = just(eventRepository.delete(event))
 }

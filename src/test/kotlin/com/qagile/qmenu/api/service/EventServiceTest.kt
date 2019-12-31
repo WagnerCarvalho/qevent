@@ -70,12 +70,12 @@ class EventServiceTest {
     }
 
     @Test
-    fun test_delete_envent_ok() {
+    fun test_delete_event_ok() {
         val event = getEvent("Sertanejão", "festa do peao")
         eventService.saveEvent(event).toFuture().get()
-        eventService.deleteEvent(event).toFuture().get()
+        eventService.removeEvent(event, 123).toFuture().get()
 
-        val expected: Optional<Event>? = eventService.findById(event).toFuture().get()
+        val expected: Optional<Event>? = eventService.findById(event.id!!).toFuture().get()
 
         Assert.assertEquals(false, expected?.isPresent)
     }

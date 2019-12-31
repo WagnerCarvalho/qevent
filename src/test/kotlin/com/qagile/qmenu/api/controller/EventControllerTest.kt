@@ -5,6 +5,8 @@ import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.domain.EventLocation
 import com.qagile.qmenu.api.domain.EventPlace
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
+import com.qagile.qmenu.api.entities.request.DeleteEventRequest
+import com.qagile.qmenu.api.entities.response.DeleteEventResponse
 import com.qagile.qmenu.api.routers.EventRouter
 import com.qagile.qmenu.api.service.EventService
 import io.reactivex.Single
@@ -64,7 +66,7 @@ class EventControllerTest {
         val applicationUserId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("ElectroShop", "festa do cerveja")
 
-        Mockito.`when`(eventService.checkEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkCreateEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
 
         this.mvc.perform(MockMvcRequestBuilders.post(EventRouter.CREATE_EVENT_V1)
             .accept(MediaType.APPLICATION_JSON)
@@ -82,9 +84,44 @@ class EventControllerTest {
         val applicationUserId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("ElectroShop", "festa do cerveja")
 
-        Mockito.`when`(eventService.checkEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkCreateEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
 
         this.mvc.perform(MockMvcRequestBuilders.post(EventRouter.CREATE_EVENT_V1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun test_remove_event_v1_ok() {
+        val request = DeleteEventRequest("5e0b84ef2ea4095e7c19d782")
+        val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
+        val applicationUserId = requestHeader.get("user_id")?.toLong()
+        val response = DeleteEventResponse(id = "aaa", applicationUserId = applicationUserId.toString(), message = "remove_event")
+
+        Mockito.`when`(eventService.checkRemoveEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+
+        this.mvc.perform(MockMvcRequestBuilders.delete(EventRouter.DELETE_EVENT_V1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("user_id", applicationUserId)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun test_remove_event_v1_badRequest() {
+        val request = DeleteEventRequest("5e0b84ef2ea4095e7c19d782")
+        val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
+        val applicationUserId = requestHeader.get("user_id")?.toLong()
+        val response = DeleteEventResponse(id = "aaa", applicationUserId = applicationUserId.toString(), message = "remove_event")
+
+        Mockito.`when`(eventService.checkRemoveEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+
+        this.mvc.perform(MockMvcRequestBuilders.delete(EventRouter.DELETE_EVENT_V1)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
