@@ -23,7 +23,7 @@ class EventService {
         logger.info("Start checkEvent, createEventRequest: $createEventRequest")
 
         val events = Event()
-        return saveCompany(events.convertToEvents(createEventRequest, applicationUserId))
+        return saveEvent(events.convertToEvents(createEventRequest, applicationUserId))
             .doOnSuccess {
                 logger.info("End checkEvent to Feed Send Elastic Search - event: $it")
             }.doOnError {
@@ -31,7 +31,7 @@ class EventService {
             }
     }
 
-    fun updateCompany(newEvent: Event): Single<Event> {
+    fun updateEvent(newEvent: Event): Single<Event> {
         logger.info("Start updateCompany, newCompany: $newEvent")
 
         return findById(newEvent)
@@ -44,11 +44,11 @@ class EventService {
             }.doOnError {
                 logger.info("Error updateCompany, error: $it")
             }.onErrorResumeNext {
-                Single.error(EventException("400", Translator.getMessage(ErrorCode.COMPANY_DOES_NOT_EXIST)))
+                Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
     }
 
-    fun saveCompany(event: Event): Single<Event> {
+    fun saveEvent(event: Event): Single<Event> {
         logger.info("Start saveCompany, company: $event")
 
         return save(event)
@@ -57,11 +57,11 @@ class EventService {
             }.doOnError {
                 logger.info("Error saveCompany, error: $it")
             }.onErrorResumeNext {
-                Single.error(EventException("400", Translator.getMessage(ErrorCode.COMPANY_TRY_AGAIN_LATER)))
+                Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_TRY_AGAIN_LATER)))
             }
     }
 
-    fun deleteCompany(event: Event): Single<Unit> {
+    fun deleteEvent(event: Event): Single<Unit> {
         logger.info("Start deleteCompany, company: $event")
 
         return findById(event)
@@ -74,7 +74,7 @@ class EventService {
             }.doOnError {
                 logger.info("Error saveCompany, error: $it")
             }.onErrorResumeNext {
-                Single.error(EventException("400", Translator.getMessage(ErrorCode.COMPANY_DOES_NOT_EXIST)))
+                Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
     }
 
