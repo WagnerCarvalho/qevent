@@ -34,7 +34,7 @@ curl -v -X GET -H "Accept: application/json" -H "Content-Type: application/json"
 
 ```
 Test Create Event V1
-curl -v -X POST -H "Accept: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/create-event" -d'{JSON}'
+curl -v -X POST -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/create-event" -d'{JSON}'
 
 {
     "name": "Festa de 18 anos",
@@ -56,7 +56,7 @@ curl -v -X POST -H "Accept: application/json" -H "USER_ID: 123" "http://localhos
 
 ```
 Test Remove Event V1
-curl -v -X DELETE -H "Accept: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/delete-event" -d'{JSON}'
+curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/delete-event" -d'{JSON}'
 
 {
 	"id": "5e07c4ae55ec6f749ed9bcaa"
