@@ -54,3 +54,12 @@ curl -v -X POST -H "Accept: application/json" -H "USER_ID: 123" "http://localhos
 }
 ```
 
+```
+Test Remove Event V1
+curl -v -X DELETE -H "Accept: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/delete-event" -d'{JSON}'
+
+{
+	"id": "5e07c4ae55ec6f749ed9bcaa"
+}
+```
+
