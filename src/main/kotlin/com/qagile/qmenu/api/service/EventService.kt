@@ -89,5 +89,5 @@ class EventService {
 
     private fun save(event: Event) = just(eventRepository.save(event))
 
-    private fun remove(event: Event) = just(eventRepository.delete(event))
+    private fun remove(event: Event) = just(eventRepository.deleteById(event.id.toString()))
 }

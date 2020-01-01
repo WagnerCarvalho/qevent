@@ -3,13 +3,17 @@ package com.qagile.qmenu.api.service
 import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.domain.EventLocation
 import com.qagile.qmenu.api.domain.EventPlace
-import java.lang.Exception
+import com.qagile.qmenu.api.repository.EventRepository
 import java.util.Optional
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.`doThrow`
+import org.mockito.Mockito.`mock`
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
@@ -22,22 +26,33 @@ class EventServiceTest {
     @Autowired
     private lateinit var eventService: EventService
 
+    @Autowired
+    @MockBean
+    private lateinit var eventRepository: EventRepository
+
     private fun getEvent(name: String, description: String): Event {
         val eventLocation = EventLocation(lat = -23.4954556, lng = -46.6406668)
         val eventAddress = EventPlace(address = "Rua Copacabana 160, Casa 08", neighborhood = "Santana",
             city = "São Paulo", state = "SP", location = eventLocation)
 
         return Event(applicationUserId = 1, name = name, description = description,
-            email = "eletrosho@eletrosho.com.br", place = eventAddress)
+            email = "eletrosho@eletrosho.com.br", place = eventAddress, imageUrl = "test.com.br")
     }
 
     @Test
     fun test_update_event_ok() {
-        val oldEvent = eventService.saveEvent(getEvent("Rock", "Festival do Rock")).toFuture().get()
-        val newEvent = Event(id = oldEvent.id, name = "Rock in Rio Brasil", imageUrl = "http://qagile.com.br/eletroshop.png")
-        var expected: Event? = eventService.updateEvent(newEvent).toFuture().get()
+        val oldEvent = getEvent("coca-cola", "competicao para beber")
+        val newEvent = Event(id = oldEvent.id, imageUrl = "http://qagile.com.br/eletroshop.png")
 
-        Assert.assertEquals(true, expected?.name == newEvent.name)
+        val responseFindById: Optional<Event> = Optional.ofNullable(oldEvent)
+        `when`(eventRepository.findById(newEvent.id.toString())).thenReturn(responseFindById)
+
+        val responseNewEvent = newEvent.mergeDataCompany(newEvent, responseFindById.get())
+        `when`(eventRepository.save(responseNewEvent)).thenReturn(responseNewEvent)
+
+        val expected: Event? = eventService.updateEvent(newEvent).toFuture().get()
+
+        Assert.assertEquals(true, expected?.name == oldEvent.name)
         Assert.assertEquals(true, expected?.imageUrl == newEvent.imageUrl)
     }
 
@@ -54,6 +69,8 @@ class EventServiceTest {
     @Test
     fun test_save_event_ok() {
         val event = getEvent("ElectroShop", "festa do cerveja")
+
+        `when`(eventRepository.save(event)).thenReturn(event)
         val expected: Event? = eventService.saveEvent(event).toFuture().get()
 
         Assert.assertEquals(event.id, expected?.id)
@@ -72,11 +89,13 @@ class EventServiceTest {
     @Test
     fun test_delete_event_ok() {
         val event = getEvent("Sertanejão", "festa do peao")
-        eventService.saveEvent(event).toFuture().get()
-        eventService.removeEvent(event, 123).toFuture().get()
+        val responseFindById: Optional<Event> = Optional.ofNullable(event)
+        `when`(eventRepository.findById(event.id.toString())).thenReturn(responseFindById)
 
-        val expected: Optional<Event>? = eventService.findById(event.id!!).toFuture().get()
+        val mock: EventRepository = mock(EventRepository::class.java)
+        doThrow(Exception::class.java).`when`(mock).delete(event)
 
-        Assert.assertEquals(false, expected?.isPresent)
+        val expected = eventService.removeEvent(event, 123).toFuture().get()
+        Assert.assertEquals(true, expected?.message == "Event Successfully Removed")
     }
 }

@@ -20,13 +20,20 @@ $ docker-compose up -d
 $ ./gradlew bootRun -Dspring.profiles.active=local
 ```
 
+## Running Test Unit
+```
+# Run in project root
+$ ./gradlew test
+```
+
 ## KtLint Validation
 ```
 # Run in project root
 $ ./gradlew ktFormat
+$ ./gradlew ktLint
 ```
 
-## EndPoints
+## Endpoints
 ```
 Test Ping Application
 curl -v -X GET -H "Accept: application/json" -H "Content-Type: application/json" "http://localhost:8080/ping"

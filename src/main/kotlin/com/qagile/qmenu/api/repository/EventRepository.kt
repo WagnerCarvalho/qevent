@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 interface EventRepository : MongoRepository <Event, String> {
 
     fun findByEmail(email: String): MutableList<Event>
+    // fun removeById(id: String): Boolean
 }

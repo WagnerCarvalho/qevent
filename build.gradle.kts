@@ -40,6 +40,7 @@ dependencies {
 	implementation("com.squareup.okhttp3:logging-interceptor:3.10.0")
 	implementation("io.reactivex.rxjava2:rxjava:2.2.5")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation ("org.mockito:mockito-core:2.8.9")
 }
 
 tasks.withType<Test> {
