@@ -3,6 +3,7 @@ package com.qagile.qmenu.api.service
 import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.domain.EventLocation
 import com.qagile.qmenu.api.domain.EventPlace
+import com.qagile.qmenu.api.entities.request.UpdateEventRequest
 import com.qagile.qmenu.api.repository.EventRepository
 import java.util.Optional
 import org.junit.Assert
@@ -42,15 +43,15 @@ class EventServiceTest {
     @Test
     fun test_update_event_ok() {
         val oldEvent = getEvent("coca-cola", "competicao para beber")
-        val newEvent = Event(id = oldEvent.id, imageUrl = "http://qagile.com.br/eletroshop.png")
+        val newEvent = UpdateEventRequest(id = oldEvent.id, imageUrl = "http://qagile.com.br/eletroshop.png")
 
         val responseFindById: Optional<Event> = Optional.ofNullable(oldEvent)
         `when`(eventRepository.findById(newEvent.id.toString())).thenReturn(responseFindById)
 
-        val responseNewEvent = newEvent.mergeDataCompany(newEvent, responseFindById.get())
+        val responseNewEvent = Event().mergeDataCompany(newEvent, responseFindById.get())
         `when`(eventRepository.save(responseNewEvent)).thenReturn(responseNewEvent)
 
-        val expected: Event? = eventService.updateEvent(newEvent).toFuture().get()
+        val expected: Event? = eventService.updateEvent(newEvent, 123L).toFuture().get()
 
         Assert.assertEquals(true, expected?.name == oldEvent.name)
         Assert.assertEquals(true, expected?.imageUrl == newEvent.imageUrl)
@@ -58,9 +59,9 @@ class EventServiceTest {
 
     @Test
     fun test_update_event_error() {
-        val newEvent = Event(id = "5e0641f3c8f94e5ddad6591f", name = "Rock in Rio Brasil", imageUrl = "http://qagile.com.br/eletroshop.png")
+        val newEvent = UpdateEventRequest(id = "5e0641f3c8f94e5ddad6591f", name = "Rock in Rio Brasil", imageUrl = "http://qagile.com.br/eletroshop.png")
         try {
-            eventService.updateEvent(newEvent).toFuture().get()
+            eventService.updateEvent(newEvent, 123L).toFuture().get()
         } catch (ex: Exception) {
             Assert.assertEquals("com.qagile.qmenu.api.entities.EventException: O evento não está cadastrado!", ex.message)
         }
@@ -95,7 +96,7 @@ class EventServiceTest {
         val mock: EventRepository = mock(EventRepository::class.java)
         doThrow(Exception::class.java).`when`(mock).delete(event)
 
-        val expected = eventService.removeEvent(event, 123).toFuture().get()
+        val expected = eventService.removeEvent(event, 123L).toFuture().get()
         Assert.assertEquals(true, expected?.message == "Event Successfully Removed")
     }
 }

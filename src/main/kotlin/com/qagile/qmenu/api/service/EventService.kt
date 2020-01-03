@@ -4,6 +4,7 @@ import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.entities.EventException
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
 import com.qagile.qmenu.api.entities.request.DeleteEventRequest
+import com.qagile.qmenu.api.entities.request.UpdateEventRequest
 import com.qagile.qmenu.api.entities.response.DeleteEventResponse
 import com.qagile.qmenu.api.repository.EventRepository
 import com.qagile.qmenu.api.utils.ErrorCode
@@ -21,6 +22,12 @@ class EventService {
     @Autowired
     private lateinit var eventRepository: EventRepository
 
+    fun checkUpdateEvent(updateEventRequest: UpdateEventRequest, applicationUserId: Long) : Single<Event> {
+        logger.info("Start checkUpdateEvent by applicationUserId: $applicationUserId with request: $updateEventRequest")
+
+        return updateEvent(updateEventRequest, applicationUserId)
+    }
+
     fun checkRemoveEvent(deleteEventRequest: DeleteEventRequest, applicationUserId: Long): Single<DeleteEventResponse> {
         logger.info("Start checkRemoveEvent by applicationUserId: $applicationUserId with request: $deleteEventRequest")
 
@@ -33,18 +40,19 @@ class EventService {
         return saveEvent(Event().convertToEvents(createEventRequest, applicationUserId))
     }
 
-    fun updateEvent(newEvent: Event): Single<Event> {
-        logger.info("Start updateEvent, newEvent: $newEvent")
+    fun updateEvent(updateEventRequest: UpdateEventRequest, applicationUserId: Long): Single<Event> {
+        logger.info("Start updateEvent by applicationUserId: $applicationUserId with request: $updateEventRequest")
 
-        return findById(newEvent.id!!)
+        return findById(updateEventRequest.id!!)
             .filter {
                 it.isPresent
             }.flatMapSingle {
-                save(newEvent.mergeDataCompany(newEvent, it.get()))
+                save(Event().mergeDataCompany(updateEventRequest, it.get()))
             }.doOnSuccess {
-                logger.info("End updateEvent, newEvent: $it")
+                logger.info("End updateEvent by applicationUserId: $applicationUserId with response: $it")
+                logger.info("End updateEvent by applicationUserId: $applicationUserId with request: $it to feed")
             }.doOnError {
-                logger.info("Error updateEvent, error: $it")
+                logger.error("Error updateEvent by applicationUserId: $applicationUserId with error: $it")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
@@ -58,7 +66,7 @@ class EventService {
                 logger.info("End saveEvent by applicationUserId: ${event.applicationUserId} with response: $it")
                 logger.info("End saveEvent by applicationUserId: ${event.applicationUserId} with request: $it to feed")
             }.doOnError {
-                logger.info("Error saveEvent by applicationUserId: ${event.applicationUserId} with error: $it")
+                logger.error("Error saveEvent by applicationUserId: ${event.applicationUserId} with error: $it")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_TRY_AGAIN_LATER)))
             }
@@ -78,7 +86,7 @@ class EventService {
                 logger.info("End removeEvent by applicationUserId: $applicationUserId with response: $it")
                 logger.info("End removeEvent by applicationUserId: $applicationUserId with request: $it to feed")
             }.doOnError {
-                logger.info("Error removeEvent by applicationUserId: $applicationUserId with error: $event")
+                logger.error("Error removeEvent by applicationUserId: $applicationUserId with error: $event")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }

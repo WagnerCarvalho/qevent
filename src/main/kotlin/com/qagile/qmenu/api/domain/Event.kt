@@ -2,6 +2,7 @@ package com.qagile.qmenu.api.domain
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
+import com.qagile.qmenu.api.entities.request.UpdateEventRequest
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -34,7 +35,7 @@ data class Event(
     @JsonProperty("place")
     val place: EventPlace = EventPlace()
 ) {
-    fun mergeDataCompany(newEvent: Event, oldEvent: Event): Event {
+    fun mergeDataCompany(newEvent: UpdateEventRequest, oldEvent: Event): Event {
 
         return Event(
             id = oldEvent.id,
