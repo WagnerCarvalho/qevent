@@ -22,20 +22,15 @@ class EventService {
     private lateinit var eventRepository: EventRepository
 
     fun checkRemoveEvent(deleteEventRequest: DeleteEventRequest, applicationUserId: Long): Single<DeleteEventResponse> {
+        logger.info("Start checkRemoveEvent by applicationUserId: $applicationUserId with request: $deleteEventRequest")
 
         return removeEvent(Event(deleteEventRequest.id), applicationUserId)
     }
 
     fun checkCreateEvent(createEventRequest: CreateEventRequest, applicationUserId: Long): Single<Event> {
-        logger.info("Start checkEvent, createEventRequest: $createEventRequest")
+        logger.info("Start checkEvent by applicationUserId: $applicationUserId with request: $createEventRequest")
 
-        val events = Event()
-        return saveEvent(events.convertToEvents(createEventRequest, applicationUserId))
-            .doOnSuccess {
-                logger.info("End checkEvent to Feed Send Elastic Search - event: $it")
-            }.doOnError {
-                logger.error("Error checkEvent - saveEvent error: $it")
-            }
+        return saveEvent(Event().convertToEvents(createEventRequest, applicationUserId))
     }
 
     fun updateEvent(newEvent: Event): Single<Event> {
@@ -56,30 +51,34 @@ class EventService {
     }
 
     fun saveEvent(event: Event): Single<Event> {
-        logger.info("Start saveEvent,  event: $event")
+        logger.info("Start saveEvent by applicationUserId: ${event.applicationUserId} with request: $event")
 
         return save(event)
             .doOnSuccess {
-                logger.info("End saveEvent, company: $it")
+                logger.info("End saveEvent by applicationUserId: ${event.applicationUserId} with response: $it")
+                logger.info("End saveEvent by applicationUserId: ${event.applicationUserId} with request: $it to feed")
             }.doOnError {
-                logger.info("Error saveEvent, error: $it")
+                logger.info("Error saveEvent by applicationUserId: ${event.applicationUserId} with error: $it")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_TRY_AGAIN_LATER)))
             }
     }
 
     fun removeEvent(event: Event, applicationUserId: Long): Single<DeleteEventResponse> {
-        logger.info("Start deleteEvent, event: $event")
+        logger.info("Start removeEvent by applicationUserId: $applicationUserId with request: $event")
 
         return findById(event.id!!)
             .filter {
                 it.isPresent
             }.flatMapSingle {
-                remove(it.get()).map { DeleteEventResponse().getDeleteEventResponse(event.id, applicationUserId) }
+                remove(it.get()).map {
+                    DeleteEventResponse().getDeleteEventResponse(event.id, applicationUserId)
+                }
             }.doOnSuccess {
-                logger.info("End deleteEvent, event: $it")
+                logger.info("End removeEvent by applicationUserId: $applicationUserId with response: $it")
+                logger.info("End removeEvent by applicationUserId: $applicationUserId with request: $it to feed")
             }.doOnError {
-                logger.info("Error deleteEvent, error: $it")
+                logger.info("Error removeEvent by applicationUserId: $applicationUserId with error: $event")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
