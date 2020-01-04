@@ -97,7 +97,7 @@ class EventControllerTest {
     @Test
     @Throws(Exception::class)
     fun test_create_event_v1_body() {
-        val request = getEventRequest( "","festa do cerveja")
+        val request = getEventRequest("", "festa do cerveja")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("ElectroShop", "festa do cerveja")
