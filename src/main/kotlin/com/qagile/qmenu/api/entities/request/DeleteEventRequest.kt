@@ -10,5 +10,5 @@ data class DeleteEventRequest(
     @field:NotNull
     @field:NotEmpty
     @JsonProperty("id")
-    val id: String? = ObjectId().toHexString()
+    val id: String? = ""
 )

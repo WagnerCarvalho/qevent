@@ -88,7 +88,7 @@ class EventServiceTest {
     }
 
     @Test
-    fun test_delete_event_ok() {
+    fun test_remove_event_ok() {
         val event = getEvent("Sertanejão", "festa do peao")
         val responseFindById: Optional<Event> = Optional.ofNullable(event)
         `when`(eventRepository.findById(event.id.toString())).thenReturn(responseFindById)

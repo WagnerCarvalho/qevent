@@ -11,7 +11,7 @@ data class UpdateEventRequest (
     @field:NotNull
     @field:NotEmpty
     @JsonProperty("id")
-    val id: String? = ObjectId().toHexString(),
+    val id: String? = "",
 
     @JsonProperty("name")
     var name: String = "",

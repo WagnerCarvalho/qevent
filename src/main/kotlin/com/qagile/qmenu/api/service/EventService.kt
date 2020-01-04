@@ -79,9 +79,7 @@ class EventService {
             .filter {
                 it.isPresent
             }.flatMapSingle {
-                remove(it.get()).map {
-                    DeleteEventResponse().getDeleteEventResponse(event.id, applicationUserId)
-                }
+                remove(it.get()).map { DeleteEventResponse().getDeleteEventResponse(event.id, applicationUserId) }
             }.doOnSuccess {
                 logger.info("End removeEvent by applicationUserId: $applicationUserId with response: $it")
                 logger.info("End removeEvent by applicationUserId: $applicationUserId with request: $it to feed")
