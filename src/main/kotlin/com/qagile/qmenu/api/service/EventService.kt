@@ -22,7 +22,7 @@ class EventService {
     @Autowired
     private lateinit var eventRepository: EventRepository
 
-    fun checkUpdateEvent(updateEventRequest: UpdateEventRequest, applicationUserId: Long) : Single<Event> {
+    fun checkUpdateEvent(updateEventRequest: UpdateEventRequest, applicationUserId: Long): Single<Event> {
         logger.info("Start checkUpdateEvent by applicationUserId: $applicationUserId with request: $updateEventRequest")
 
         return updateEvent(updateEventRequest, applicationUserId)
