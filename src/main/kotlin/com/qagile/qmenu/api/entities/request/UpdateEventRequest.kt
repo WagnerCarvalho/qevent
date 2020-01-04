@@ -1,7 +1,7 @@
 package com.qagile.qmenu.api.entities.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.qagile.qmenu.api.domain.EventPlace
+import com.qagile.qmenu.api.entities.EventPlace
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 

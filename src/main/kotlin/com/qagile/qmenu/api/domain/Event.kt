@@ -1,6 +1,8 @@
 package com.qagile.qmenu.api.domain
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.qagile.qmenu.api.entities.EventLocation
+import com.qagile.qmenu.api.entities.EventPlace
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
 import com.qagile.qmenu.api.entities.request.UpdateEventRequest
 import org.bson.types.ObjectId

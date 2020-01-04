@@ -1,4 +1,4 @@
-package com.qagile.qmenu.api.entities
+package com.qagile.qmenu.api.entities.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
