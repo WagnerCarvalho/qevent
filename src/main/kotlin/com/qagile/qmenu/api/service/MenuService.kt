@@ -19,23 +19,30 @@ class MenuService {
     @Autowired
     private lateinit var menuRepository: MenuRepository
 
+    @Autowired
+    private lateinit var eventService: EventService
+
     fun checkCreateMenu(createMenuRequest: CreateMenuRequest, applicationUserId: Long): Single<Menu> {
-        logger.info("Start checkcreateMenu by applicationUserId: $applicationUserId with request: $createMenuRequest")
+        logger.info("Start checkCreateMenu by applicationUserId: $applicationUserId with request: $createMenuRequest")
 
         return saveMenu(Menu().convertToMenu(createMenuRequest), applicationUserId)
     }
 
     fun saveMenu(menu: Menu, applicationUserId: Long): Single<Menu> {
-        logger.info("Start saveEvent by applicationUserId: $applicationUserId with request: $menu")
+        logger.info("Start saveMenu by applicationUserId: $applicationUserId with request: $menu")
 
-        return save(menu)
-            .doOnSuccess {
-                logger.info("End saveEvent by applicationUserId: $applicationUserId with response: $it")
-                logger.info("End saveEvent by applicationUserId: $applicationUserId with request: $it to feed")
+        return eventService.findById(menu.eventId)
+            .filter {
+                it.isPresent
+            }.flatMapSingle {
+                save(menu)
+            }.doOnSuccess {
+                logger.info("End saveMenu by applicationUserId: $applicationUserId with response: $it")
+                logger.info("End saveMenu by applicationUserId: $applicationUserId with request: $it to feed")
             }.doOnError {
-                logger.error("Error saveEvent by applicationUserId: $applicationUserId with error: $it")
+                logger.error("Error saveMenu by applicationUserId: $applicationUserId with error: $it")
             }.onErrorResumeNext {
-                Single.error(MenuException("400", Translator.getMessage(ErrorCode.UNREGISTERED_PRODUCT)))
+                Single.error(MenuException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
     }
 
