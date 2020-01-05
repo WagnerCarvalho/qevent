@@ -1,4 +1,4 @@
-package com.qagile.qmenu.api.domain
+package com.qagile.qmenu.api.entities
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

@@ -1,8 +1,8 @@
 package com.qagile.qmenu.api.service
 
 import com.qagile.qmenu.api.domain.Event
-import com.qagile.qmenu.api.domain.EventLocation
-import com.qagile.qmenu.api.domain.EventPlace
+import com.qagile.qmenu.api.entities.EventLocation
+import com.qagile.qmenu.api.entities.EventPlace
 import com.qagile.qmenu.api.entities.request.UpdateEventRequest
 import com.qagile.qmenu.api.repository.EventRepository
 import java.util.Optional
@@ -63,7 +63,7 @@ class EventServiceTest {
         try {
             eventService.updateEvent(newEvent, 123L).toFuture().get()
         } catch (ex: Exception) {
-            Assert.assertEquals("com.qagile.qmenu.api.entities.EventException: O evento não está cadastrado!", ex.message)
+            Assert.assertEquals("com.qagile.qmenu.api.entities.exception.EventException: O evento não está cadastrado!", ex.message)
         }
     }
 

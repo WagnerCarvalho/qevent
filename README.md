@@ -34,15 +34,14 @@ $ ./gradlew ktLint
 ```
 
 ## Endpoints
+Ping by Test Application
 ```
-Test Ping Application
 curl -v -X GET -H "Accept: application/json" -H "Content-Type: application/json" "http://localhost:8080/ping"
 ```
 
+Create Event
 ```
-Test Create Event V1
 curl -v -X POST -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/create-event" -d'{JSON}'
-
 {
     "name": "Festa de 18 anos",
     "description": "Festa de niver 18anos",
@@ -61,12 +60,33 @@ curl -v -X POST -H "Content-Type: application/json" -H "USER_ID: 123" "http://lo
 }
 ```
 
+Remove Event
 ```
-Test Remove Event V1
 curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/delete-event" -d'{JSON}'
-
 {
 	"id": "5e07c4ae55ec6f749ed9bcaa"
 }
 ```
 
+Update Event
+```
+curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/update-event" -d'{JSON}'
+{
+    "id": "5e10e3a17abf81169172fff5",
+    "name": "Tribe 9 anos",
+    "place": {
+        "address": "Pedreira"
+    }
+}
+```
+
+Create Menu
+```
+curl -v -X POST -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/create-menu" -d'{JSON}'
+{
+	"event_id": "5e10e312125f2447ce744251",
+	"product": "Vodka Ciroc",
+	"description": "Vodka Importada",
+	"price": 10250.99
+}
+```
