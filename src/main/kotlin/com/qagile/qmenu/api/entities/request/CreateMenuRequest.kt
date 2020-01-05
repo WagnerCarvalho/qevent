@@ -1,11 +1,11 @@
 package com.qagile.qmenu.api.entities.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.math.BigDecimal
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 data class CreateMenuRequest(
+
     @field:NotNull
     @field:NotEmpty
     @JsonProperty("event_id")
@@ -20,7 +20,7 @@ data class CreateMenuRequest(
     val description: String = "",
 
     @field:NotNull
-    @field:NotEmpty
     @JsonProperty("price")
-    val price: BigDecimal = "0.00".toBigDecimal()
+    val price: Double = "0.0".toDouble()
+
 )

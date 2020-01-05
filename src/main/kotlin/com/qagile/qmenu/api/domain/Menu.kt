@@ -3,7 +3,6 @@ package com.qagile.qmenu.api.domain
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.qagile.qmenu.api.entities.ProductStatus
 import com.qagile.qmenu.api.entities.request.CreateMenuRequest
-import java.math.BigDecimal
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -28,7 +27,7 @@ data class Menu(
     val status: ProductStatus = ProductStatus.ACTIVE,
 
     @JsonProperty("price")
-    val price: BigDecimal = "0.00".toBigDecimal()
+    val price: Double = "0.0".toDouble()
 
 ) {
     fun convertToMenu(createMenuRequest: CreateMenuRequest): Menu {
