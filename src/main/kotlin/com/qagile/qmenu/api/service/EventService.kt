@@ -1,7 +1,7 @@
 package com.qagile.qmenu.api.service
 
 import com.qagile.qmenu.api.domain.Event
-import com.qagile.qmenu.api.entities.EventException
+import com.qagile.qmenu.api.entities.exception.EventException
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
 import com.qagile.qmenu.api.entities.request.DeleteEventRequest
 import com.qagile.qmenu.api.entities.request.UpdateEventRequest

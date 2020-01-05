@@ -2,8 +2,8 @@ package com.qagile.qmenu.api.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.qagile.qmenu.api.domain.Event
-import com.qagile.qmenu.api.domain.EventLocation
-import com.qagile.qmenu.api.domain.EventPlace
+import com.qagile.qmenu.api.entities.EventLocation
+import com.qagile.qmenu.api.entities.EventPlace
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
 import com.qagile.qmenu.api.entities.request.DeleteEventRequest
 import com.qagile.qmenu.api.entities.request.UpdateEventRequest
