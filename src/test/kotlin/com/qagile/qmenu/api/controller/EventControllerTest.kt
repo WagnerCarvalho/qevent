@@ -5,9 +5,9 @@ import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.entities.EventLocation
 import com.qagile.qmenu.api.entities.EventPlace
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
-import com.qagile.qmenu.api.entities.request.DeleteEventRequest
+import com.qagile.qmenu.api.entities.request.DeleteRequest
 import com.qagile.qmenu.api.entities.request.UpdateEventRequest
-import com.qagile.qmenu.api.entities.response.DeleteEventResponse
+import com.qagile.qmenu.api.entities.response.DeleteResponse
 import com.qagile.qmenu.api.routers.EventRouter
 import com.qagile.qmenu.api.service.EventService
 import io.reactivex.Single
@@ -61,7 +61,7 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_create_event_v1_ok() {
+    fun test_create_event_ok() {
         val request = getEventRequest("ElectroShop", "festa do cerveja")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
@@ -79,7 +79,7 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_create_event_v1_bad_request_header() {
+    fun test_create_event_bad_request_header() {
         val request = getEventRequest("ElectroShop", "festa do cerveja")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
@@ -96,7 +96,7 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_create_event_v1_body() {
+    fun test_create_event_body() {
         val request = getEventRequest("", "festa do cerveja")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
@@ -114,11 +114,11 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_remove_event_v1_ok() {
-        val request = DeleteEventRequest("5e0b84ef2ea4095e7c19d782")
+    fun test_remove_event_ok() {
+        val request = DeleteRequest("5e0b84ef2ea4095e7c19d782")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
-        val response = DeleteEventResponse(id = "aaa", applicationUserId = applicationUserId.toString(), message = "remove_event")
+        val response = DeleteResponse(id = "aaa", applicationUserId = applicationUserId!!, message = "remove_event")
 
         Mockito.`when`(eventService.checkRemoveEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
 
@@ -132,11 +132,11 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_remove_event_v1_request_header() {
-        val request = DeleteEventRequest("5e0b84ef2ea4095e7c19d782")
+    fun test_remove_event_request_header() {
+        val request = DeleteRequest("5e0b84ef2ea4095e7c19d782")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
-        val response = DeleteEventResponse(id = "aaa", applicationUserId = applicationUserId.toString(), message = "remove_event")
+        val response = DeleteResponse(id = "aaa", applicationUserId = applicationUserId!!, message = "remove_event")
 
         Mockito.`when`(eventService.checkRemoveEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
 
@@ -149,11 +149,11 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_remove_event_v1_request_body() {
-        val request = DeleteEventRequest()
+    fun test_remove_event_request_body() {
+        val request = DeleteRequest()
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
-        val response = DeleteEventResponse(id = "aaa", applicationUserId = applicationUserId.toString(), message = "remove_event")
+        val response = DeleteResponse(id = "aaa", applicationUserId = applicationUserId!!, message = "remove_event")
 
         Mockito.`when`(eventService.checkRemoveEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
 
@@ -166,7 +166,7 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_update_event_v1_ok() {
+    fun test_update_event_ok() {
         val request = UpdateEventRequest(id = "5e0d19ec2e57b97f0adfa7b3", name = "Summer Festival")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
@@ -184,7 +184,7 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_update_event_v1_ok_request_header() {
+    fun test_update_event_ok_request_header() {
         val request = UpdateEventRequest(id = "5e0d19ec2e57b97f0adfa7b3", name = "Summer Festival")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()
@@ -201,7 +201,7 @@ class EventControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_update_event_v1_ok_request_body() {
+    fun test_update_event_ok_request_body() {
         val request = UpdateEventRequest(name = "Summer Festival")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
         val applicationUserId = requestHeader.get("user_id")?.toLong()

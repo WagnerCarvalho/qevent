@@ -3,11 +3,12 @@ package com.qagile.qmenu.api.service
 import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.entities.exception.EventException
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
-import com.qagile.qmenu.api.entities.request.DeleteEventRequest
+import com.qagile.qmenu.api.entities.request.DeleteRequest
 import com.qagile.qmenu.api.entities.request.UpdateEventRequest
-import com.qagile.qmenu.api.entities.response.DeleteEventResponse
+import com.qagile.qmenu.api.entities.response.DeleteResponse
 import com.qagile.qmenu.api.repository.EventRepository
 import com.qagile.qmenu.api.utils.ErrorCode
+import com.qagile.qmenu.api.utils.SuccessCode
 import com.qagile.qmenu.api.utils.Translator
 import io.reactivex.Single
 import io.reactivex.Single.just
@@ -28,10 +29,10 @@ class EventService {
         return updateEvent(updateEventRequest, applicationUserId)
     }
 
-    fun checkRemoveEvent(deleteEventRequest: DeleteEventRequest, applicationUserId: Long): Single<DeleteEventResponse> {
-        logger.info("Start checkRemoveEvent by applicationUserId: $applicationUserId with request: $deleteEventRequest")
+    fun checkRemoveEvent(deleteRequest: DeleteRequest, applicationUserId: Long): Single<DeleteResponse> {
+        logger.info("Start checkRemoveEvent by applicationUserId: $applicationUserId with request: $deleteRequest")
 
-        return removeEvent(Event(deleteEventRequest.id), applicationUserId)
+        return removeEvent(Event(deleteRequest.id), applicationUserId)
     }
 
     fun checkCreateEvent(createEventRequest: CreateEventRequest, applicationUserId: Long): Single<Event> {
@@ -72,14 +73,16 @@ class EventService {
             }
     }
 
-    fun removeEvent(event: Event, applicationUserId: Long): Single<DeleteEventResponse> {
+    fun removeEvent(event: Event, applicationUserId: Long): Single<DeleteResponse> {
         logger.info("Start removeEvent by applicationUserId: $applicationUserId with request: $event")
 
         return findById(event.id!!)
             .filter {
                 it.isPresent
             }.flatMapSingle {
-                remove(it.get()).map { DeleteEventResponse().getDeleteEventResponse(event.id, applicationUserId) }
+                remove(it.get()).map {
+                    DeleteResponse().getDeleteEventResponse(event.id, applicationUserId, Translator.getMessage(SuccessCode.EVENT_REMOVE))
+                }
             }.doOnSuccess {
                 logger.info("End removeEvent by applicationUserId: $applicationUserId with response: $it")
                 logger.info("End removeEvent by applicationUserId: $applicationUserId with request: $it to feed")

@@ -4,6 +4,8 @@ import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.domain.Menu
 import com.qagile.qmenu.api.entities.EventLocation
 import com.qagile.qmenu.api.entities.EventPlace
+import com.qagile.qmenu.api.entities.ProductStatus
+import com.qagile.qmenu.api.entities.request.DeleteRequest
 import com.qagile.qmenu.api.repository.MenuRepository
 import io.reactivex.Single.just
 import java.util.Optional
@@ -84,6 +86,39 @@ class MenuServiceTest {
             menuService.saveMenu(request, applicationUserId).toFuture().get()
         } catch (ex: Exception) {
             Assert.assertEquals("com.qagile.qmenu.api.entities.exception.MenuException: O evento não está cadastrado!", ex.message)
+        }
+    }
+
+    @Test
+    fun test_remove_menu_success() {
+        val request = DeleteRequest(id = "qwe")
+        val applicationUserId = 123L
+        val menu = Menu(id = "qwe", eventId = "123", product = "Coca", description = "Lata de Refrigerante", status = ProductStatus.ACTIVE, price = 5.00)
+        val responseFindById: Optional<Menu> = Optional.ofNullable(menu)
+
+        val mock: MenuRepository = Mockito.mock(MenuRepository::class.java)
+        Mockito.doThrow(Exception::class.java).`when`(mock).deleteById(request.id)
+        Mockito.`when`(menuRepository.findById(request.id)).thenReturn(responseFindById)
+
+        val expected = menuService.removeMenu(request, applicationUserId).toFuture().get()
+
+        Assert.assertEquals(true, expected.message == "Item removido do Menu com sucesso!")
+    }
+
+    @Test
+    fun test_remove_menu_error() {
+        val request = DeleteRequest(id = "qwe")
+        val applicationUserId = 123L
+        val responseFindById: Optional<Menu> = Optional.empty()
+
+        val mock: MenuRepository = Mockito.mock(MenuRepository::class.java)
+        Mockito.doThrow(Exception::class.java).`when`(mock).deleteById(request.id)
+        Mockito.`when`(menuRepository.findById(request.id)).thenReturn(responseFindById)
+
+        try {
+            menuService.removeMenu(request, applicationUserId).toFuture().get()
+        } catch (ex: Exception) {
+            Assert.assertEquals("com.qagile.qmenu.api.entities.exception.MenuException: Esse item não existe no Menu!", ex.message)
         }
     }
 }
