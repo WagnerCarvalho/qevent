@@ -97,6 +97,6 @@ class EventServiceTest {
         doThrow(Exception::class.java).`when`(mock).delete(event)
 
         val expected = eventService.removeEvent(event, 123L).toFuture().get()
-        Assert.assertEquals(true, expected?.message == "Event Successfully Removed")
+        Assert.assertEquals(true, expected?.message == "Evento removido com sucesso!")
     }
 }

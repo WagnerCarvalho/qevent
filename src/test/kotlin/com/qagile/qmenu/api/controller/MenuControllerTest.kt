@@ -3,9 +3,11 @@ package com.qagile.qmenu.api.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.qagile.qmenu.api.domain.Menu
 import com.qagile.qmenu.api.entities.request.CreateMenuRequest
+import com.qagile.qmenu.api.entities.request.DeleteRequest
+import com.qagile.qmenu.api.entities.response.DeleteResponse
 import com.qagile.qmenu.api.routers.MenuRouter
 import com.qagile.qmenu.api.service.MenuService
-import io.reactivex.Single
+import io.reactivex.Single.just
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
@@ -54,12 +56,12 @@ class MenuControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_create_menu_v1_ok() {
+    fun test_create_menu_ok() {
         val request = getMenuRequest("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10".toDouble())
         val response = getMenu("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10.00".toDouble())
         val applicationUserId = 123L
 
-        Mockito.`when`(menuService.checkCreateMenu(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(menuService.checkCreateMenu(request, applicationUserId!!)).thenReturn(just(response))
 
         this.mvc.perform(MockMvcRequestBuilders.post(MenuRouter.CREATE_MENU_V1)
             .accept(MediaType.APPLICATION_JSON)
@@ -71,14 +73,47 @@ class MenuControllerTest {
 
     @Test
     @Throws(Exception::class)
-    fun test_create_menu_v1_bad_request_header() {
+    fun test_create_menu_bad_request_header() {
         val request = getMenuRequest("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10".toDouble())
         val response = getMenu("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10.00".toDouble())
         val applicationUserId = 123L
 
-        Mockito.`when`(menuService.checkCreateMenu(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(menuService.checkCreateMenu(request, applicationUserId!!)).thenReturn(just(response))
 
         this.mvc.perform(MockMvcRequestBuilders.post(MenuRouter.CREATE_MENU_V1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun test_delete_menu_ok() {
+        val applicationUserId = 123L
+        val request = DeleteRequest(id = "123")
+        val response = DeleteResponse().getDeleteEventResponse(request.id, applicationUserId, "Item removido do Menu com sucesso!")
+
+        Mockito.`when`(menuService.removeMenu(request, applicationUserId)).thenReturn(just(response))
+
+        this.mvc.perform(MockMvcRequestBuilders.delete(MenuRouter.DELETE_MENU_V1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("user_id", applicationUserId)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun test_delete_menu_bad_request_header() {
+        val applicationUserId = 123L
+        val request = DeleteRequest(id = "123")
+        val response = DeleteResponse().getDeleteEventResponse(request.id, applicationUserId, "Item removido do Menu com sucesso!")
+
+        Mockito.`when`(menuService.removeMenu(request, applicationUserId)).thenReturn(just(response))
+
+        this.mvc.perform(MockMvcRequestBuilders.delete(MenuRouter.DELETE_MENU_V1)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
