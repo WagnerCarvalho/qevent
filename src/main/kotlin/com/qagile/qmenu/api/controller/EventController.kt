@@ -2,9 +2,9 @@ package com.qagile.qmenu.api.controller
 
 import com.qagile.qmenu.api.domain.Event
 import com.qagile.qmenu.api.entities.request.CreateEventRequest
-import com.qagile.qmenu.api.entities.request.DeleteEventRequest
+import com.qagile.qmenu.api.entities.request.DeleteRequest
 import com.qagile.qmenu.api.entities.request.UpdateEventRequest
-import com.qagile.qmenu.api.entities.response.DeleteEventResponse
+import com.qagile.qmenu.api.entities.response.DeleteResponse
 import com.qagile.qmenu.api.routers.EventRouter
 import com.qagile.qmenu.api.service.EventService
 import com.qagile.qmenu.api.utils.toFutureResponse
@@ -25,7 +25,7 @@ class EventController {
     private lateinit var eventService: EventService
 
     @PutMapping(EventRouter.UPDATE_EVENT_V1)
-    fun updateEventV1(
+    fun updateEvent(
         @Valid @RequestBody updateEventRequest: UpdateEventRequest,
         @RequestHeader(value = "user_id") applicationUserId: Long
     ): Future<Event> {
@@ -34,16 +34,16 @@ class EventController {
     }
 
     @DeleteMapping(EventRouter.DELETE_EVENT_V1)
-    fun removeEventV1(
-        @Valid @RequestBody deleteEventRequest: DeleteEventRequest,
+    fun removeEvent(
+        @Valid @RequestBody deleteRequest: DeleteRequest,
         @RequestHeader(value = "user_id") applicationUserId: Long
-    ): Future<DeleteEventResponse> {
+    ): Future<DeleteResponse> {
 
-        return eventService.checkRemoveEvent(deleteEventRequest, applicationUserId).toFutureResponse()
+        return eventService.checkRemoveEvent(deleteRequest, applicationUserId).toFutureResponse()
     }
 
     @PostMapping(EventRouter.CREATE_EVENT_V1)
-    fun createEventV1(
+    fun createEvent(
         @Valid @RequestBody createEventRequest: CreateEventRequest,
         @RequestHeader(value = "user_id") applicationUserId: Long
     ): Future<Event> {
