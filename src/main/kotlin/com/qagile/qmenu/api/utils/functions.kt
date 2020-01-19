@@ -1,11 +1,14 @@
 package com.qagile.qmenu.api.utils
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Future
 import javax.servlet.http.HttpServletRequest
 import okhttp3.Headers
+import retrofit2.HttpException
+import java.nio.charset.Charset
 
 fun <T> Single<T>.toFutureResponse(): Future<T> {
     val future = CompletableFuture<T>()
@@ -65,4 +68,22 @@ fun Headers.convertToMap(): Map<String, String> {
     }
 
     return response
+}
+
+fun Throwable.getError(): String? {
+    var errorData = this.toString()
+
+    if (this is HttpException) {
+        val source = this.response().errorBody()?.source()
+        source?.request(Long.MAX_VALUE)
+        val responseBodyString = source?.buffer()?.clone()?.readString(Charset.forName("UTF-8"))
+        errorData = responseBodyString.objectToString()
+    }
+
+    return errorData
+}
+
+fun Any?.objectToString(): String {
+
+    return ObjectMapper().writeValueAsString(this)
 }
