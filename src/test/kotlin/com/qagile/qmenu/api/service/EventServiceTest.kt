@@ -43,7 +43,7 @@ class EventServiceTest {
     @Test
     fun test_update_event_ok() {
         val oldEvent = getEvent("coca-cola", "competicao para beber")
-        val newEvent = UpdateEventRequest(id = oldEvent.id, imageUrl = "http://qagile.com.br/eletroshop.png")
+        val newEvent = UpdateEventRequest(id = oldEvent.id!!, imageUrl = "http://qagile.com.br/eletroshop.png")
 
         val responseFindById: Optional<Event> = Optional.ofNullable(oldEvent)
         `when`(eventRepository.findById(newEvent.id.toString())).thenReturn(responseFindById)
@@ -98,5 +98,24 @@ class EventServiceTest {
 
         val expected = eventService.removeEvent(event, 123L).toFuture().get()
         Assert.assertEquals(true, expected?.message == "Evento removido com sucesso!")
+    }
+
+    @Test
+    fun test_check_update_event() {
+        val updateEventRequest = UpdateEventRequest(id="qwe", name="Amne")
+        val applicationUserId = 123L
+        val eventNew = getEvent("Amne", "festa do Eletron")
+        val eventOld = getEvent("Sertanejão", "festa do peao")
+
+        val responseFindById: Optional<Event> = Optional.ofNullable(eventOld)
+        `when`(eventRepository.findById(updateEventRequest.id)).thenReturn(responseFindById)
+
+        val aaa = Event().mergeDataCompany(updateEventRequest, eventOld)
+
+        `when`(eventRepository.save(aaa)).thenReturn(eventNew)
+
+        val expected = eventService.checkUpdateEvent(updateEventRequest, applicationUserId).toFuture().get()
+
+        Assert.assertEquals(true, expected.name == updateEventRequest.name)
     }
 }
