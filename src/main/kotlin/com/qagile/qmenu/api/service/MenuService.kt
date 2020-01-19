@@ -9,6 +9,7 @@ import com.qagile.qmenu.api.repository.MenuRepository
 import com.qagile.qmenu.api.utils.ErrorCode
 import com.qagile.qmenu.api.utils.SuccessCode
 import com.qagile.qmenu.api.utils.Translator
+import com.qagile.qmenu.api.utils.getError
 import io.reactivex.Single
 import io.reactivex.Single.just
 import org.slf4j.LoggerFactory
@@ -45,7 +46,7 @@ class MenuService {
                 logger.info("End removeMenu by applicationUserId: $applicationUserId with response: $it")
                 logger.info("End removeMenu by applicationUserId: $applicationUserId with request: $it to feed")
             }.doOnError {
-                logger.error("Error removeMenu by applicationUserId: $applicationUserId with error: $it")
+                logger.error("Error removeMenu by applicationUserId: $applicationUserId with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(MenuException("400", Translator.getMessage(ErrorCode.MENU_DOES_NOT_EXIST)))
             }
@@ -63,7 +64,7 @@ class MenuService {
                 logger.info("End saveMenu by applicationUserId: $applicationUserId with response: $it")
                 logger.info("End saveMenu by applicationUserId: $applicationUserId with request: $it to feed")
             }.doOnError {
-                logger.error("Error saveMenu by applicationUserId: $applicationUserId with error: $it")
+                logger.error("Error saveMenu by applicationUserId: $applicationUserId with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(MenuException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
