@@ -10,6 +10,7 @@ import com.qagile.qmenu.api.repository.EventRepository
 import com.qagile.qmenu.api.utils.ErrorCode
 import com.qagile.qmenu.api.utils.SuccessCode
 import com.qagile.qmenu.api.utils.Translator
+import com.qagile.qmenu.api.utils.getError
 import io.reactivex.Single
 import io.reactivex.Single.just
 import org.slf4j.LoggerFactory
@@ -53,7 +54,7 @@ class EventService {
                 logger.info("End updateEvent by applicationUserId: $applicationUserId with response: $it")
                 logger.info("End updateEvent by applicationUserId: $applicationUserId with request: $it to feed")
             }.doOnError {
-                logger.error("Error updateEvent by applicationUserId: $applicationUserId with error: $it")
+                logger.error("Error updateEvent by applicationUserId: $applicationUserId with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
@@ -67,7 +68,7 @@ class EventService {
                 logger.info("End saveEvent by applicationUserId: ${event.applicationUserId} with response: $it")
                 logger.info("End saveEvent by applicationUserId: ${event.applicationUserId} with request: $it to feed")
             }.doOnError {
-                logger.error("Error saveEvent by applicationUserId: ${event.applicationUserId} with error: $it")
+                logger.error("Error saveEvent by applicationUserId: ${event.applicationUserId} with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_TRY_AGAIN_LATER)))
             }
@@ -87,7 +88,7 @@ class EventService {
                 logger.info("End removeEvent by applicationUserId: $applicationUserId with response: $it")
                 logger.info("End removeEvent by applicationUserId: $applicationUserId with request: $it to feed")
             }.doOnError {
-                logger.error("Error removeEvent by applicationUserId: $applicationUserId with error: $event")
+                logger.error("Error removeEvent by applicationUserId: $applicationUserId with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }

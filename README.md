@@ -23,7 +23,7 @@ $ ./gradlew bootRun -Dspring.profiles.active=local
 ## Running Test Unit
 ```
 # Run in project root
-$ ./gradlew test
+$ ./gradlew cleanTest test
 ```
 
 ## KtLint Validation
@@ -88,5 +88,13 @@ curl -v -X POST -H "Content-Type: application/json" -H "USER_ID: 123" "http://lo
 	"product": "Vodka Ciroc",
 	"description": "Vodka Importada",
 	"price": 10250.99
+}
+```
+
+Remove Menu
+```
+curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/delete-menu" -d'{JSON}'
+{
+    "id": "5e1243c377ca0d1b398c4c34"
 }
 ```

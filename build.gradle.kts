@@ -39,6 +39,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("com.squareup.okhttp3:logging-interceptor:3.10.0")
 	implementation("io.reactivex.rxjava2:rxjava:2.2.5")
+	implementation("com.squareup.retrofit2:retrofit:2.4.0")
+	implementation("com.squareup.retrofit2:converter-jackson:2.4.0")
+	implementation("com.squareup.retrofit2:adapter-rxjava2:2.4.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation ("org.mockito:mockito-core:2.8.9")
 }
