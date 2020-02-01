@@ -6,6 +6,7 @@ import com.qagile.qmenu.api.entities.EventLocation
 import com.qagile.qmenu.api.entities.EventPlace
 import com.qagile.qmenu.api.entities.ProductStatus
 import com.qagile.qmenu.api.entities.request.DeleteRequest
+import com.qagile.qmenu.api.entities.request.UpdateMenuRequest
 import com.qagile.qmenu.api.repository.MenuRepository
 import io.reactivex.Single.just
 import java.util.Optional
@@ -36,6 +37,8 @@ class MenuServiceTest {
     @MockBean
     private lateinit var menuRepository: MenuRepository
 
+    val applicationUserId = 123L
+
     private fun getEvent(name: String, description: String): Event {
         val eventLocation = EventLocation(lat = -23.4954556, lng = -46.6406668)
         val eventAddress = EventPlace(address = "Rua Copacabana 160, Casa 08", neighborhood = "Santana",
@@ -59,7 +62,6 @@ class MenuServiceTest {
     fun test_create_menu_ok() {
         val event = getEvent("coca-cola", "competicao para beber")
         val request = getMenu(event.id.toString(), "Vodka Ciroc", "Vodka Importada", "50.00".toDouble())
-        val applicationUserId = 123L
 
         val responseFindById: Optional<Event> = Optional.ofNullable(event)
         Mockito.`when`(eventService.findById(request.eventId)).thenReturn(just(responseFindById))
@@ -76,7 +78,6 @@ class MenuServiceTest {
     fun test_create_menu_error() {
         val event = getEvent("coca-cola", "competicao para beber")
         val request = getMenu(event.id.toString(), "Vodka Ciroc", "Vodka Importada", "50.00".toDouble())
-        val applicationUserId = 123L
 
         val responseFindById: Optional<Event> = Optional.empty()
         Mockito.`when`(eventService.findById(request.eventId)).thenReturn(just(responseFindById))
@@ -92,7 +93,6 @@ class MenuServiceTest {
     @Test
     fun test_remove_menu_success() {
         val request = DeleteRequest(id = "qwe")
-        val applicationUserId = 123L
         val menu = Menu(id = "qwe", eventId = "123", product = "Coca", description = "Lata de Refrigerante", status = ProductStatus.ACTIVE, price = 5.00)
         val responseFindById: Optional<Menu> = Optional.ofNullable(menu)
 
@@ -108,7 +108,6 @@ class MenuServiceTest {
     @Test
     fun test_remove_menu_error() {
         val request = DeleteRequest(id = "qwe")
-        val applicationUserId = 123L
         val responseFindById: Optional<Menu> = Optional.empty()
 
         val mock: MenuRepository = Mockito.mock(MenuRepository::class.java)
@@ -120,5 +119,35 @@ class MenuServiceTest {
         } catch (ex: Exception) {
             Assert.assertEquals("com.qagile.qmenu.api.entities.exception.MenuException: Esse item não existe no Menu!", ex.message)
         }
+    }
+
+    @Test
+    fun test_updateMenu() {
+        val updateMenuRequest = UpdateMenuRequest(id = "123", product = "refrigerante")
+        val menu = getMenu(eventId = "12345", product = "coca-cola", description = "bebida não alcoólica", price = 10.0)
+        val event = getEvent("teste", "festa do teste")
+        val responseFindById: Optional<Event> = Optional.ofNullable(event)
+
+        Mockito.`when`(eventService.findById(menu.eventId)).thenReturn(just(responseFindById))
+        Mockito.`when`(menuRepository.save(Menu().mergeDataMenu(updateMenuRequest, menu))).thenReturn(Menu().mergeDataMenu(updateMenuRequest, menu))
+
+        val expected = menuService.updateMenu(updateMenuRequest, menu, applicationUserId).toFuture().get()
+        Assert.assertEquals(true, expected.product == "refrigerante")
+    }
+
+    @Test
+    fun test_checkUpdateMenu() {
+        val updateMenuRequest = UpdateMenuRequest(id = "123", product = "refrigerante")
+        val menu = getMenu(eventId = "12345", product = "coca-cola", description = "bebida não alcoólica", price = 10.0)
+        val event = getEvent("teste", "festa do teste")
+
+        val responseFindByIdMenu: Optional<Menu> = Optional.ofNullable(menu)
+        val responseFindByIdEvent: Optional<Event> = Optional.ofNullable(event)
+        Mockito.`when`(menuRepository.findById(updateMenuRequest.id)).thenReturn(responseFindByIdMenu)
+        Mockito.`when`(eventService.findById(menu.eventId)).thenReturn(just(responseFindByIdEvent))
+        Mockito.`when`(menuRepository.save(Menu().mergeDataMenu(updateMenuRequest, menu))).thenReturn(Menu().mergeDataMenu(updateMenuRequest, menu))
+
+        val expected = menuService.checkUpdateMenu(updateMenuRequest, applicationUserId).toFuture().get()
+        Assert.assertEquals(true, expected.product == "refrigerante")
     }
 }

@@ -102,7 +102,7 @@ class EventServiceTest {
 
     @Test
     fun test_check_update_event() {
-        val updateEventRequest = UpdateEventRequest(id="qwe", name="Amne")
+        val updateEventRequest = UpdateEventRequest(id = "qwe", name = "Amne")
         val applicationUserId = 123L
         val eventNew = getEvent("Amne", "festa do Eletron")
         val eventOld = getEvent("Sertanejão", "festa do peao")
@@ -113,7 +113,6 @@ class EventServiceTest {
         val aaa = Event().mergeDataCompany(updateEventRequest, eventOld)
 
         `when`(eventRepository.save(aaa)).thenReturn(eventNew)
-
         val expected = eventService.checkUpdateEvent(updateEventRequest, applicationUserId).toFuture().get()
 
         Assert.assertEquals(true, expected.name == updateEventRequest.name)

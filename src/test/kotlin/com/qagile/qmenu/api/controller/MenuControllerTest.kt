@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.qagile.qmenu.api.domain.Menu
 import com.qagile.qmenu.api.entities.request.CreateMenuRequest
 import com.qagile.qmenu.api.entities.request.DeleteRequest
+import com.qagile.qmenu.api.entities.request.UpdateMenuRequest
 import com.qagile.qmenu.api.entities.response.DeleteResponse
 import com.qagile.qmenu.api.routers.MenuRouter
 import com.qagile.qmenu.api.service.MenuService
@@ -117,6 +118,55 @@ class MenuControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun test_updateMenu_ok() {
+        val applicationUserId = 123L
+        val request = UpdateMenuRequest(id = "123", product = "refrigerante")
+        val response = getMenu("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10.00".toDouble())
+
+        Mockito.`when`(menuService.checkUpdateMenu(request, applicationUserId)).thenReturn(just(response))
+
+        this.mvc.perform(MockMvcRequestBuilders.put(MenuRouter.UPDATE_MENU_V1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("user_id", applicationUserId)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun test_updateMenu_bad_request_header() {
+        val applicationUserId = 123L
+        val request = UpdateMenuRequest(id = "123", product = "refrigerante")
+        val response = getMenu("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10.00".toDouble())
+
+        Mockito.`when`(menuService.checkUpdateMenu(request, applicationUserId)).thenReturn(just(response))
+
+        this.mvc.perform(MockMvcRequestBuilders.put(MenuRouter.UPDATE_MENU_V1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(MockMvcResultMatchers.status().is4xxClientError)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun test_updateMenu_bad_request_body() {
+        val applicationUserId = 123L
+        val request = UpdateMenuRequest(id = "123", product = "refrigerante")
+        val response = getMenu("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10.00".toDouble())
+
+        Mockito.`when`(menuService.checkUpdateMenu(request, applicationUserId)).thenReturn(just(response))
+
+        this.mvc.perform(MockMvcRequestBuilders.put(MenuRouter.UPDATE_MENU_V1)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("user_id", applicationUserId))
             .andExpect(MockMvcResultMatchers.status().is4xxClientError)
     }
 }
