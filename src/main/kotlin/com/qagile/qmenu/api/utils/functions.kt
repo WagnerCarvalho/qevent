@@ -3,12 +3,12 @@ package com.qagile.qmenu.api.utils
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.reactivex.Observable
 import io.reactivex.Single
+import java.nio.charset.Charset
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Future
 import javax.servlet.http.HttpServletRequest
 import okhttp3.Headers
 import retrofit2.HttpException
-import java.nio.charset.Charset
 
 fun <T> Single<T>.toFutureResponse(): Future<T> {
     val future = CompletableFuture<T>()

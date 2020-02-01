@@ -4,6 +4,7 @@ import com.qagile.qmenu.api.domain.Menu
 import com.qagile.qmenu.api.entities.exception.MenuException
 import com.qagile.qmenu.api.entities.request.CreateMenuRequest
 import com.qagile.qmenu.api.entities.request.DeleteRequest
+import com.qagile.qmenu.api.entities.request.UpdateMenuRequest
 import com.qagile.qmenu.api.entities.response.DeleteResponse
 import com.qagile.qmenu.api.repository.MenuRepository
 import com.qagile.qmenu.api.utils.ErrorCode
@@ -30,6 +31,34 @@ class MenuService {
         logger.info("Start checkCreateMenu by applicationUserId: $applicationUserId with request: $createMenuRequest")
 
         return saveMenu(Menu().convertToMenu(createMenuRequest), applicationUserId)
+    }
+
+    fun checkUpdateMenu(updateMenuRequest: UpdateMenuRequest, applicationUserId: Long): Single<Menu> {
+        logger.info("Start checkUpdateMenu by applicationUserId: $applicationUserId with request: $updateMenuRequest")
+
+        return findById(updateMenuRequest.id)
+            .filter {
+                it.isPresent
+            }.flatMapSingle {
+                updateMenu(updateMenuRequest, it.get(), applicationUserId)
+            }.doOnSuccess {
+                logger.info("End checkUpdateMenu by applicationUserId: $applicationUserId with response: $it")
+            }.doOnError {
+                logger.error("Error removeMenu by applicationUserId: $applicationUserId with error: ${it.getError()}")
+            }.onErrorResumeNext {
+                Single.error(MenuException("400", Translator.getMessage(ErrorCode.ERROR_TO_UPDATE_MENU)))
+            }
+    }
+
+    fun updateMenu(updateMenuRequest: UpdateMenuRequest, menu: Menu, applicationUserId: Long): Single<Menu> {
+        logger.info("Start updateMenu by applicationUserId: $applicationUserId with request: $updateMenuRequest")
+
+        return saveMenu(Menu().mergeDataMenu(updateMenuRequest, menu), applicationUserId)
+            .doOnSuccess {
+                logger.info("End updateMenu by applicationUserId: $applicationUserId with response: $it")
+            }.doOnError {
+                logger.error("Error updateMenu by applicationUserId: $applicationUserId with error: $it")
+            }
     }
 
     fun removeMenu(deleteMenuRequest: DeleteRequest, applicationUserId: Long): Single<DeleteResponse> {
