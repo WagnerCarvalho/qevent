@@ -98,3 +98,12 @@ curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://
     "id": "5e1243c377ca0d1b398c4c34"
 }
 ```
+
+Update Menu
+```
+curl -v -X PUT -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/update-menu" -d'{JSON}'
+{
+    "id": "5e35d5b589ccfa7e2208d926",
+    "description": "Catuaba Nacional"
+}
+```

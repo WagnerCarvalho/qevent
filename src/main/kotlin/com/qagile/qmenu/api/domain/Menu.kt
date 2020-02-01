@@ -3,6 +3,7 @@ package com.qagile.qmenu.api.domain
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.qagile.qmenu.api.entities.ProductStatus
 import com.qagile.qmenu.api.entities.request.CreateMenuRequest
+import com.qagile.qmenu.api.entities.request.UpdateMenuRequest
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -38,5 +39,27 @@ data class Menu(
             description = createMenuRequest.description,
             price = createMenuRequest.price
         )
+    }
+
+    fun mergeDataMenu(newMenu: UpdateMenuRequest, oldMenu: Menu): Menu {
+
+        return Menu(
+            id = oldMenu.id,
+            eventId = oldMenu.eventId,
+            product = if (newMenu.product == "") oldMenu.product else newMenu.product,
+            description = if (newMenu.description == "") oldMenu.description else newMenu.description,
+            status = if (newMenu.status == "") getStatus(oldMenu.description) else getStatus(newMenu.description),
+            price = if (newMenu.price == "0.0".toDouble()) oldMenu.price else newMenu.price
+        )
+    }
+
+    fun getStatus(status: String): ProductStatus {
+
+        return when (status) {
+            ProductStatus.ACTIVE.name -> ProductStatus.ACTIVE
+            ProductStatus.PENDING.name -> ProductStatus.PENDING
+            ProductStatus.CANCELED.name -> ProductStatus.CANCELED
+            else -> ProductStatus.PENDING
+        }
     }
 }
