@@ -38,5 +38,18 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      # run tests!
-      - run: gradle test
+      - run:
+          name: Test Unit
+          command: ./gradlew cleanTest test
+
+      - store_artifacts:
+          path: app/build/reports/test
+          destination: test/
+
+      - run:
+          name: Test KtLint
+          command: ./gradlew ktLint
+
+      - store_artifacts:
+          path: app/build/reports/kt
+          destination: kt/

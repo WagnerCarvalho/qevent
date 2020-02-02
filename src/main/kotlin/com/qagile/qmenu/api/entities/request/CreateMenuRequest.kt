@@ -26,6 +26,4 @@ data class CreateMenuRequest(
     @JsonProperty("url")
     val url: String = ""
 
-
-
 )
