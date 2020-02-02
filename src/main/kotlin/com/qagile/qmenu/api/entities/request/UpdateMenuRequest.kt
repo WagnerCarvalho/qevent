@@ -21,6 +21,9 @@ data class UpdateMenuRequest(
     val status: String = "",
 
     @JsonProperty("price")
-    val price: Double = "0.0".toDouble()
+    val price: Double = "0.0".toDouble(),
+
+    @JsonProperty("url")
+    val url: String = ""
 
 )
