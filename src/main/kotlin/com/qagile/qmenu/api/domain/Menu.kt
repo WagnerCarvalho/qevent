@@ -28,7 +28,10 @@ data class Menu(
     val status: ProductStatus = ProductStatus.ACTIVE,
 
     @JsonProperty("price")
-    val price: Double = "0.0".toDouble()
+    val price: Double = "0.0".toDouble(),
+
+    @JsonProperty("url")
+    val url: String = ""
 
 ) {
     fun convertToMenu(createMenuRequest: CreateMenuRequest): Menu {
@@ -37,7 +40,8 @@ data class Menu(
             eventId = createMenuRequest.eventId,
             product = createMenuRequest.product,
             description = createMenuRequest.description,
-            price = createMenuRequest.price
+            price = createMenuRequest.price,
+            url = createMenuRequest.url
         )
     }
 
@@ -49,7 +53,8 @@ data class Menu(
             product = if (newMenu.product == "") oldMenu.product else newMenu.product,
             description = if (newMenu.description == "") oldMenu.description else newMenu.description,
             status = if (newMenu.status == "") getStatus(oldMenu.description) else getStatus(newMenu.description),
-            price = if (newMenu.price == "0.0".toDouble()) oldMenu.price else newMenu.price
+            price = if (newMenu.price == "0.0".toDouble()) oldMenu.price else newMenu.price,
+            url = if (newMenu.url == "") oldMenu.url else newMenu.url
         )
     }
 
