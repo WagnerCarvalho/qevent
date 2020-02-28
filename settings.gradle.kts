@@ -1,1 +1,1 @@
-rootProject.name = "qmenu"
+rootProject.name = "qevent"
