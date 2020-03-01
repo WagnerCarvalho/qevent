@@ -1,5 +1,8 @@
 FROM gradle:4.3.0-jdk8-alpine
 
+EXPOSE 80
+EXPOSE 443
+
 #RUN mkdir /code
 #COPY build/libs /code
 #
