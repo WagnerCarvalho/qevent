@@ -1,7 +1,19 @@
-version: '3.1'
-
+version: '3'
 services:
-  mongo:
+  event-nginx:
+    container_name: event-nginx
+    image: nginx:1.13
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+
+  event-mongodb:
+    container_name: event-mongodb
     image: mongo
     restart: always
 #    environment:
@@ -11,3 +23,26 @@ services:
       - "27017:27017"
     volumes:
       - /tmp/mongo_data:/data/db
+
+  # event-mongodb:
+  #   container_name: event-mongodb
+  #   image: mongo:3.6
+  #   restart: always
+  #   environment:
+  #     - MONGO_DATA_DIR=/data/db
+  #     - MONGO_LOG_DIR=/dev/null
+  #   ports:
+  #     - 27017:27017
+  #   command: mongod --smallfiles --logpath=/dev/null
+
+  app:
+    build: ./app
+    working_dir: /app
+    volumes:
+      - ./app:/app
+      - ~/.m2:/root/.m2
+    expose:
+      - 8080
+    command: ./gradlew bootRun
+    depends_on:
+      - event-mongodb
