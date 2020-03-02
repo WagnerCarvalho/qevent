@@ -40,7 +40,9 @@ jobs:
 
       - run:
           name: Test Unit
-          command: [ "cd /app", "./gradlew cleanTest test" ]
+          #command: [ "bin/elasticsearch", "-Ediscovery.type=single-node" ]
+          working_directory: ~/qevent/app
+          command: ./gradlew cleanTest test
 
       - store_artifacts:
           path: app/build/reports/test
@@ -48,8 +50,8 @@ jobs:
 
       - run:
           name: Test KtLint
-          working_directory: ~/app
-          command: [ "cd /app", "./gradlew ktLint" ]
+          working_directory: ~/qevent/app
+          command: ./gradlew ktLint
           
       - store_artifacts:
           path: app/build/reports/kt
