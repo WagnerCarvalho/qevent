@@ -40,9 +40,8 @@ jobs:
 
       - run:
           name: Test Unit
-          command: [ "/app && ./gradlew cleanTest test" ]
-          # working_directory: ~/qevent/app
-          # command: ./gradlew cleanTest test
+          path: app/
+          command: ./gradlew cleanTest test
 
       - store_artifacts:
           path: app/build/reports/test
@@ -50,9 +49,8 @@ jobs:
 
       - run:
           name: Test KtLint
-          command: [ "/app && ./gradlew ktLint" ]
-          # working_directory: ~/qevent/app
-          # command: ./gradlew ktLint
+          path: app/
+          command: ./gradlew ktLint
           
       - store_artifacts:
           path: app/build/reports/kt
