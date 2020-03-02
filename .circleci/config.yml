@@ -48,9 +48,8 @@ jobs:
 
       - run:
           name: Test KtLint
-          command: cd app/ && ./gradlew ktLint
-          command: 
-
+          command: [ 'cd app/ && ./gradlew ktLint' ]
+          
       - store_artifacts:
           path: app/build/reports/kt
           destination: kt/
