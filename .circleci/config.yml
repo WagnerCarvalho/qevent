@@ -40,7 +40,7 @@ jobs:
 
       - run:
           name: Test Unit
-          command: [ "cd qevent/app && ./gradlew cleanTest test" ]
+          command: [ "/qevent/app && ./gradlew cleanTest test" ]
           # working_directory: ~/qevent/app
           # command: ./gradlew cleanTest test
 
@@ -50,7 +50,7 @@ jobs:
 
       - run:
           name: Test KtLint
-          command: [ "cd qevent/app && ./gradlew ktLint" ]
+          command: [ "/qevent/app && ./gradlew ktLint" ]
           # working_directory: ~/qevent/app
           # command: ./gradlew ktLint
           
