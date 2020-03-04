@@ -37,14 +37,14 @@ class MenuServiceTest {
     @MockBean
     private lateinit var menuRepository: MenuRepository
 
-    val applicationUserId = 123L
+    val userId = 123L
 
     private fun getEvent(name: String, description: String): Event {
         val eventLocation = EventLocation(lat = -23.4954556, lng = -46.6406668)
         val eventAddress = EventPlace(address = "Rua Copacabana 160, Casa 08", neighborhood = "Santana",
             city = "São Paulo", state = "SP", location = eventLocation)
 
-        return Event(applicationUserId = 1, name = name, description = description,
+        return Event(userId = 1, name = name, description = description,
             email = "eletrosho@eletrosho.com.br", place = eventAddress, imageUrl = "test.com.br")
     }
 
@@ -67,7 +67,7 @@ class MenuServiceTest {
         Mockito.`when`(eventService.findById(request.eventId)).thenReturn(just(responseFindById))
         Mockito.`when`(menuRepository.save(request)).thenReturn(request)
 
-        val expected = menuService.saveMenu(request, applicationUserId).toFuture().get()
+        val expected = menuService.saveMenu(request, userId).toFuture().get()
         Assert.assertEquals(true, expected.id == request.id)
         Assert.assertEquals(true, expected.eventId == request.eventId)
         Assert.assertEquals(true, expected.product == request.product)
@@ -84,7 +84,7 @@ class MenuServiceTest {
         Mockito.`when`(menuRepository.save(request)).thenReturn(request)
 
         try {
-            menuService.saveMenu(request, applicationUserId).toFuture().get()
+            menuService.saveMenu(request, userId).toFuture().get()
         } catch (ex: Exception) {
             Assert.assertEquals("com.qagile.qevent.api.entities.exception.MenuException: O evento não está cadastrado!", ex.message)
         }
@@ -100,7 +100,7 @@ class MenuServiceTest {
         Mockito.doThrow(Exception::class.java).`when`(mock).deleteById(request.id)
         Mockito.`when`(menuRepository.findById(request.id)).thenReturn(responseFindById)
 
-        val expected = menuService.removeMenu(request, applicationUserId).toFuture().get()
+        val expected = menuService.removeMenu(request, userId).toFuture().get()
 
         Assert.assertEquals(true, expected.message == "Item removido do Menu com sucesso!")
     }
@@ -115,7 +115,7 @@ class MenuServiceTest {
         Mockito.`when`(menuRepository.findById(request.id)).thenReturn(responseFindById)
 
         try {
-            menuService.removeMenu(request, applicationUserId).toFuture().get()
+            menuService.removeMenu(request, userId).toFuture().get()
         } catch (ex: Exception) {
             Assert.assertEquals("com.qagile.qevent.api.entities.exception.MenuException: Esse item não existe no Menu!", ex.message)
         }
@@ -131,7 +131,7 @@ class MenuServiceTest {
         Mockito.`when`(eventService.findById(menu.eventId)).thenReturn(just(responseFindById))
         Mockito.`when`(menuRepository.save(Menu().mergeDataMenu(updateMenuRequest, menu))).thenReturn(Menu().mergeDataMenu(updateMenuRequest, menu))
 
-        val expected = menuService.updateMenu(updateMenuRequest, menu, applicationUserId).toFuture().get()
+        val expected = menuService.updateMenu(updateMenuRequest, menu, userId).toFuture().get()
         Assert.assertEquals(true, expected.product == "refrigerante")
     }
 
@@ -147,7 +147,7 @@ class MenuServiceTest {
         Mockito.`when`(eventService.findById(menu.eventId)).thenReturn(just(responseFindByIdEvent))
         Mockito.`when`(menuRepository.save(Menu().mergeDataMenu(updateMenuRequest, menu))).thenReturn(Menu().mergeDataMenu(updateMenuRequest, menu))
 
-        val expected = menuService.checkUpdateMenu(updateMenuRequest, applicationUserId).toFuture().get()
+        val expected = menuService.checkUpdateMenu(updateMenuRequest, userId).toFuture().get()
         Assert.assertEquals(true, expected.product == "refrigerante")
     }
 }

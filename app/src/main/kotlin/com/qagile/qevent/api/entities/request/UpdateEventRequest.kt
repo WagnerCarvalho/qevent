@@ -2,15 +2,11 @@ package com.qagile.qevent.api.entities.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.qagile.qevent.api.entities.EventPlace
-import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 
 data class UpdateEventRequest(
 
-    @field:NotNull
-    @field:NotEmpty
     @JsonProperty("id")
-    val id: String = "",
+    var id: String = "",
 
     @JsonProperty("name")
     var name: String = "",
@@ -26,4 +22,10 @@ data class UpdateEventRequest(
 
     @JsonProperty("place")
     var place: EventPlace = EventPlace()
-)
+) {
+    fun get(id: String): UpdateEventRequest {
+
+        this.id = id
+        return this
+    }
+}

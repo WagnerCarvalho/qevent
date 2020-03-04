@@ -24,26 +24,26 @@ class EventService {
     @Autowired
     private lateinit var eventRepository: EventRepository
 
-    fun checkUpdateEvent(updateEventRequest: UpdateEventRequest, applicationUserId: Long): Single<Event> {
-        logger.info("Start checkUpdateEvent by applicationUserId: $applicationUserId with request: $updateEventRequest")
+    fun checkUpdateEvent(updateEventRequest: UpdateEventRequest, userId: Long): Single<Event> {
+        logger.info("Start checkUpdateEvent by userId: $userId with request: $updateEventRequest")
 
-        return updateEvent(updateEventRequest, applicationUserId)
+        return updateEvent(updateEventRequest, userId)
     }
 
-    fun checkRemoveEvent(deleteRequest: DeleteRequest, applicationUserId: Long): Single<DeleteResponse> {
-        logger.info("Start checkRemoveEvent by applicationUserId: $applicationUserId with request: $deleteRequest")
+    fun checkRemoveEvent(deleteRequest: DeleteRequest, userId: Long): Single<DeleteResponse> {
+        logger.info("Start checkRemoveEvent by userId: $userId with request: $deleteRequest")
 
-        return removeEvent(Event(deleteRequest.id), applicationUserId)
+        return removeEvent(Event(deleteRequest.id), userId)
     }
 
-    fun checkCreateEvent(createEventRequest: CreateEventRequest, applicationUserId: Long): Single<Event> {
-        logger.info("Start checkEvent by applicationUserId: $applicationUserId with request: $createEventRequest")
+    fun checkCreateEvent(createEventRequest: CreateEventRequest, userId: Long): Single<Event> {
+        logger.info("Start checkEvent by userId: $userId with request: $createEventRequest")
 
-        return saveEvent(Event().convertToEvents(createEventRequest, applicationUserId))
+        return saveEvent(Event().convertToEvents(createEventRequest, userId))
     }
 
-    fun updateEvent(updateEventRequest: UpdateEventRequest, applicationUserId: Long): Single<Event> {
-        logger.info("Start updateEvent by applicationUserId: $applicationUserId with request: $updateEventRequest")
+    fun updateEvent(updateEventRequest: UpdateEventRequest, userId: Long): Single<Event> {
+        logger.info("Start updateEvent by userId: $userId with request: $updateEventRequest")
 
         return findById(updateEventRequest.id!!)
             .filter {
@@ -51,44 +51,44 @@ class EventService {
             }.flatMapSingle {
                 save(Event().mergeDataCompany(updateEventRequest, it.get()))
             }.doOnSuccess {
-                logger.info("End updateEvent by applicationUserId: $applicationUserId with response: $it")
-                logger.info("End updateEvent by applicationUserId: $applicationUserId with request: $it to feed")
+                logger.info("End updateEvent by userId: $userId with response: $it")
+                logger.info("End updateEvent by userId: $userId with request: $it to feed")
             }.doOnError {
-                logger.error("Error updateEvent by applicationUserId: $applicationUserId with error: ${it.getError()}")
+                logger.error("Error updateEvent by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }
     }
 
     fun saveEvent(event: Event): Single<Event> {
-        logger.info("Start saveEvent by applicationUserId: ${event.applicationUserId} with request: $event")
+        logger.info("Start saveEvent by userId: ${event.userId} with request: $event")
 
         return save(event)
             .doOnSuccess {
-                logger.info("End saveEvent by applicationUserId: ${event.applicationUserId} with response: $it")
-                logger.info("End saveEvent by applicationUserId: ${event.applicationUserId} with request: $it to feed")
+                logger.info("End saveEvent by userId: ${event.userId} with response: $it")
+                logger.info("End saveEvent by userId: ${event.userId} with request: $it to feed")
             }.doOnError {
-                logger.error("Error saveEvent by applicationUserId: ${event.applicationUserId} with error: ${it.getError()}")
+                logger.error("Error saveEvent by userId: ${event.userId} with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_TRY_AGAIN_LATER)))
             }
     }
 
-    fun removeEvent(event: Event, applicationUserId: Long): Single<DeleteResponse> {
-        logger.info("Start removeEvent by applicationUserId: $applicationUserId with request: $event")
+    fun removeEvent(event: Event, userId: Long): Single<DeleteResponse> {
+        logger.info("Start removeEvent by userId: $userId with request: $event")
 
         return findById(event.id!!)
             .filter {
                 it.isPresent
             }.flatMapSingle {
                 remove(it.get()).map {
-                    DeleteResponse().getDeleteEventResponse(event.id, applicationUserId, Translator.getMessage(SuccessCode.EVENT_REMOVE))
+                    DeleteResponse().getDeleteEventResponse(event.id, userId, Translator.getMessage(SuccessCode.EVENT_REMOVE))
                 }
             }.doOnSuccess {
-                logger.info("End removeEvent by applicationUserId: $applicationUserId with response: $it")
-                logger.info("End removeEvent by applicationUserId: $applicationUserId with request: $it to feed")
+                logger.info("End removeEvent by userId: $userId with response: $it")
+                logger.info("End removeEvent by userId: $userId with request: $it to feed")
             }.doOnError {
-                logger.error("Error removeEvent by applicationUserId: $applicationUserId with error: ${it.getError()}")
+                logger.error("Error removeEvent by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
             }

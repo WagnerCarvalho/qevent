@@ -55,7 +55,7 @@ class EventControllerTest {
 
     private fun getEvent(name: String, description: String): Event {
 
-        return Event(applicationUserId = 1, name = name, description = description,
+        return Event(userId = 1, name = name, description = description,
             email = "eletrosho@eletrosho.com.br", place = eventAddress)
     }
 
@@ -64,15 +64,15 @@ class EventControllerTest {
     fun test_create_event_ok() {
         val request = getEventRequest("ElectroShop", "festa do cerveja")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
+        val userId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("ElectroShop", "festa do cerveja")
 
-        Mockito.`when`(eventService.checkCreateEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkCreateEvent(request, userId!!)).thenReturn(Single.just(response))
 
         this.mvc.perform(MockMvcRequestBuilders.post(EventRouter.CREATE_EVENT_V1)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-            .header("user_id", applicationUserId)
+            .header("user_id", userId)
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -82,10 +82,10 @@ class EventControllerTest {
     fun test_create_event_bad_request_header() {
         val request = getEventRequest("ElectroShop", "festa do cerveja")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
+        val userId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("ElectroShop", "festa do cerveja")
 
-        Mockito.`when`(eventService.checkCreateEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkCreateEvent(request, userId!!)).thenReturn(Single.just(response))
 
         this.mvc.perform(MockMvcRequestBuilders.post(EventRouter.CREATE_EVENT_V1)
             .accept(MediaType.APPLICATION_JSON)
@@ -99,15 +99,15 @@ class EventControllerTest {
     fun test_create_event_body() {
         val request = getEventRequest("", "festa do cerveja")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
+        val userId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("ElectroShop", "festa do cerveja")
 
-        Mockito.`when`(eventService.checkCreateEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkCreateEvent(request, userId!!)).thenReturn(Single.just(response))
 
         this.mvc.perform(MockMvcRequestBuilders.post(EventRouter.CREATE_EVENT_V1)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-            .header("user_id", applicationUserId)
+            .header("user_id", userId)
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().is4xxClientError)
     }
@@ -117,15 +117,15 @@ class EventControllerTest {
     fun test_remove_event_ok() {
         val request = DeleteRequest("5e0b84ef2ea4095e7c19d782")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
-        val response = DeleteResponse(id = "aaa", applicationUserId = applicationUserId!!, message = "remove_event")
+        val userId = requestHeader.get("user_id")?.toLong()
+        val response = DeleteResponse(id = "aaa", userId = userId!!, message = "remove_event")
 
-        Mockito.`when`(eventService.checkRemoveEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkRemoveEvent(request, userId!!)).thenReturn(Single.just(response))
 
-        this.mvc.perform(MockMvcRequestBuilders.delete(EventRouter.DELETE_EVENT_V1)
+        this.mvc.perform(MockMvcRequestBuilders.delete(EventRouter.DELETE_EVENT_V1, "5e0b84ef2ea4095e7c19d782")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-            .header("user_id", applicationUserId)
+            .header("user_id", userId)
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -135,12 +135,12 @@ class EventControllerTest {
     fun test_remove_event_request_header() {
         val request = DeleteRequest("5e0b84ef2ea4095e7c19d782")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
-        val response = DeleteResponse(id = "aaa", applicationUserId = applicationUserId!!, message = "remove_event")
+        val userId = requestHeader.get("user_id")?.toLong()
+        val response = DeleteResponse(id = "aaa", userId = userId!!, message = "remove_event")
 
-        Mockito.`when`(eventService.checkRemoveEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkRemoveEvent(request, userId!!)).thenReturn(Single.just(response))
 
-        this.mvc.perform(MockMvcRequestBuilders.delete(EventRouter.DELETE_EVENT_V1)
+        this.mvc.perform(MockMvcRequestBuilders.delete(EventRouter.DELETE_EVENT_V1, "5e0b84ef2ea4095e7c19d782")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
@@ -152,12 +152,12 @@ class EventControllerTest {
     fun test_remove_event_request_body() {
         val request = DeleteRequest()
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
-        val response = DeleteResponse(id = "aaa", applicationUserId = applicationUserId!!, message = "remove_event")
+        val userId = requestHeader.get("user_id")?.toLong()
+        val response = DeleteResponse(id = "aaa", userId = userId!!, message = "remove_event")
 
-        Mockito.`when`(eventService.checkRemoveEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkRemoveEvent(request, userId!!)).thenReturn(Single.just(response))
 
-        this.mvc.perform(MockMvcRequestBuilders.delete(EventRouter.DELETE_EVENT_V1)
+        this.mvc.perform(MockMvcRequestBuilders.delete(EventRouter.DELETE_EVENT_V1, "5e0b84ef2ea4095e7c19d782")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
@@ -169,15 +169,15 @@ class EventControllerTest {
     fun test_update_event_ok() {
         val request = UpdateEventRequest(id = "5e0d19ec2e57b97f0adfa7b3", name = "Summer Festival")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
+        val userId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("Summer Festival", "festival da cerveja")
 
-        Mockito.`when`(eventService.checkUpdateEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkUpdateEvent(request, userId!!)).thenReturn(Single.just(response))
 
-        this.mvc.perform(MockMvcRequestBuilders.put(EventRouter.UPDATE_EVENT_V1)
+        this.mvc.perform(MockMvcRequestBuilders.put(EventRouter.UPDATE_EVENT_V1, "5e0d19ec2e57b97f0adfa7b3")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-            .header("user_id", applicationUserId)
+            .header("user_id", userId)
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -187,12 +187,12 @@ class EventControllerTest {
     fun test_update_event_ok_request_header() {
         val request = UpdateEventRequest(id = "5e0d19ec2e57b97f0adfa7b3", name = "Summer Festival")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
+        val userId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("Summer Festival", "festival da cerveja")
 
-        Mockito.`when`(eventService.checkUpdateEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkUpdateEvent(request, userId!!)).thenReturn(Single.just(response))
 
-        this.mvc.perform(MockMvcRequestBuilders.put(EventRouter.UPDATE_EVENT_V1)
+        this.mvc.perform(MockMvcRequestBuilders.put(EventRouter.UPDATE_EVENT_V1, "5e0d19ec2e57b97f0adfa7b3")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request)))
@@ -204,15 +204,15 @@ class EventControllerTest {
     fun test_update_event_ok_request_body() {
         val request = UpdateEventRequest(name = "Summer Festival")
         val requestHeader: HashMap<String, String> = hashMapOf("Content-Type" to "application/json", "user_id" to "123")
-        val applicationUserId = requestHeader.get("user_id")?.toLong()
+        val userId = requestHeader.get("user_id")?.toLong()
         val response = getEvent("Summer Festival", "festival da cerveja")
 
-        Mockito.`when`(eventService.checkUpdateEvent(request, applicationUserId!!)).thenReturn(Single.just(response))
+        Mockito.`when`(eventService.checkUpdateEvent(request, userId!!)).thenReturn(Single.just(response))
 
-        this.mvc.perform(MockMvcRequestBuilders.put(EventRouter.UPDATE_EVENT_V1)
+        this.mvc.perform(MockMvcRequestBuilders.put(EventRouter.UPDATE_EVENT_V1, "")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
-            .header("user_id", applicationUserId)
+            .header("user_id", userId)
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().is4xxClientError)
     }

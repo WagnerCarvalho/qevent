@@ -16,8 +16,8 @@ data class Event(
     @JsonProperty("id")
     val id: String? = ObjectId().toHexString(),
 
-    @JsonProperty("application_user_id")
-    val applicationUserId: Long = 0,
+    @JsonProperty("user_id")
+    val userId: Long = 0,
 
     @JsonProperty("name")
     val name: String = "",
@@ -41,7 +41,7 @@ data class Event(
 
         return Event(
             id = oldEvent.id,
-            applicationUserId = oldEvent.applicationUserId,
+            userId = oldEvent.userId,
             name = if (newEvent.name == "") oldEvent.name else newEvent.name,
             description = if (newEvent.description == "") oldEvent.description else newEvent.description,
             email = if (newEvent.email == "") oldEvent.email else newEvent.email,
@@ -60,10 +60,10 @@ data class Event(
         )
     }
 
-    fun convertToEvents(createEventRequest: CreateEventRequest, applicationUserId: Long): Event {
+    fun convertToEvents(createEventRequest: CreateEventRequest, userId: Long): Event {
 
         return Event(
-            applicationUserId = applicationUserId,
+            userId = userId,
             name = createEventRequest.name,
             description = createEventRequest.description,
             email = createEventRequest.email,

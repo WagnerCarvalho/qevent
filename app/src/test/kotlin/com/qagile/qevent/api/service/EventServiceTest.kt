@@ -36,7 +36,7 @@ class EventServiceTest {
         val eventAddress = EventPlace(address = "Rua Copacabana 160, Casa 08", neighborhood = "Santana",
             city = "São Paulo", state = "SP", location = eventLocation)
 
-        return Event(applicationUserId = 1, name = name, description = description,
+        return Event(userId = 1, name = name, description = description,
             email = "eletrosho@eletrosho.com.br", place = eventAddress, imageUrl = "test.com.br")
     }
 
@@ -75,7 +75,7 @@ class EventServiceTest {
         val expected: Event? = eventService.saveEvent(event).toFuture().get()
 
         Assert.assertEquals(event.id, expected?.id)
-        Assert.assertEquals(event.applicationUserId, expected?.applicationUserId)
+        Assert.assertEquals(event.userId, expected?.userId)
         Assert.assertEquals(event.name, expected?.name)
         Assert.assertEquals(event.description, expected?.description)
         Assert.assertEquals(event.email, expected?.email)
@@ -103,7 +103,7 @@ class EventServiceTest {
     @Test
     fun test_check_update_event() {
         val updateEventRequest = UpdateEventRequest(id = "qwe", name = "Amne")
-        val applicationUserId = 123L
+        val userId = 123L
         val eventNew = getEvent("Amne", "festa do Eletron")
         val eventOld = getEvent("Sertanejão", "festa do peao")
 
@@ -113,7 +113,7 @@ class EventServiceTest {
         val aaa = Event().mergeDataCompany(updateEventRequest, eventOld)
 
         `when`(eventRepository.save(aaa)).thenReturn(eventNew)
-        val expected = eventService.checkUpdateEvent(updateEventRequest, applicationUserId).toFuture().get()
+        val expected = eventService.checkUpdateEvent(updateEventRequest, userId).toFuture().get()
 
         Assert.assertEquals(true, expected.name == updateEventRequest.name)
     }

@@ -12,6 +12,7 @@ import java.util.concurrent.Future
 import javax.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -26,28 +27,29 @@ class MenuController {
 
     @PutMapping(MenuRouter.UPDATE_MENU_V1)
     fun updateMenu(
+        @PathVariable id: String,
         @Valid @RequestBody updateMenuRequest: UpdateMenuRequest,
-        @RequestHeader(value = "user_id") applicationUserId: Long
+        @RequestHeader(value = "user_id") userId: Long
     ): Future<Menu> {
 
-        return menuService.checkUpdateMenu(updateMenuRequest, applicationUserId).toFutureResponse()
+        return menuService.checkUpdateMenu(updateMenuRequest.get(id), userId).toFutureResponse()
     }
 
     @PostMapping(MenuRouter.CREATE_MENU_V1)
     fun createMenu(
         @Valid @RequestBody createMenuRequest: CreateMenuRequest,
-        @RequestHeader(value = "user_id") applicationUserId: Long
+        @RequestHeader(value = "user_id") userId: Long
     ): Future<Menu> {
 
-        return menuService.checkCreateMenu(createMenuRequest, applicationUserId).toFutureResponse()
+        return menuService.checkCreateMenu(createMenuRequest, userId).toFutureResponse()
     }
 
     @DeleteMapping(MenuRouter.DELETE_MENU_V1)
     fun deleteMenu(
-        @Valid @RequestBody deleteMenuRequest: DeleteRequest,
-        @RequestHeader(value = "user_id") applicationUserId: Long
+        @PathVariable id: String,
+        @RequestHeader(value = "user_id") userId: Long
     ): Future<DeleteResponse> {
 
-        return menuService.removeMenu(deleteMenuRequest, applicationUserId).toFutureResponse()
+        return menuService.removeMenu(DeleteRequest(id), userId).toFutureResponse()
     }
 }

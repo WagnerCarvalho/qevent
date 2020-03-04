@@ -12,6 +12,7 @@ import java.util.concurrent.Future
 import javax.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -26,28 +27,29 @@ class EventController {
 
     @PutMapping(EventRouter.UPDATE_EVENT_V1)
     fun updateEvent(
+        @PathVariable id: String,
         @Valid @RequestBody updateEventRequest: UpdateEventRequest,
-        @RequestHeader(value = "user_id") applicationUserId: Long
+        @RequestHeader(value = "user_id") userId: Long
     ): Future<Event> {
 
-        return eventService.checkUpdateEvent(updateEventRequest, applicationUserId).toFutureResponse()
+        return eventService.checkUpdateEvent(updateEventRequest.get(id), userId).toFutureResponse()
     }
 
     @DeleteMapping(EventRouter.DELETE_EVENT_V1)
     fun removeEvent(
-        @Valid @RequestBody deleteRequest: DeleteRequest,
-        @RequestHeader(value = "user_id") applicationUserId: Long
+        @PathVariable id: String,
+        @RequestHeader(value = "user_id") userId: Long
     ): Future<DeleteResponse> {
 
-        return eventService.checkRemoveEvent(deleteRequest, applicationUserId).toFutureResponse()
+        return eventService.checkRemoveEvent(DeleteRequest(id), userId).toFutureResponse()
     }
 
     @PostMapping(EventRouter.CREATE_EVENT_V1)
     fun createEvent(
         @Valid @RequestBody createEventRequest: CreateEventRequest,
-        @RequestHeader(value = "user_id") applicationUserId: Long
+        @RequestHeader(value = "user_id") userId: Long
     ): Future<Event> {
 
-        return eventService.checkCreateEvent(createEventRequest, applicationUserId).toFutureResponse()
+        return eventService.checkCreateEvent(createEventRequest, userId).toFutureResponse()
     }
 }
