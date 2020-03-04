@@ -1,9 +1,11 @@
-FROM gradle:4.3.0-jdk8-alpine
+FROM openjdk:8-jre-alpine
 
-EXPOSE 80
-EXPOSE 443
+RUN apk add --update bash && rm -rf /var/cache/apk/*
 
-#RUN mkdir /code
-#COPY build/libs /code
-#
-#ENTRYPOINT [ "sh", "-c", "java -jar -Duser.timezone=$TIMEZONE -Dnetworkaddress.cache.ttl=60 -Dnetworkaddress.cache.negative.ttl=30 -Xms1024m -Xmx2048m -server -XX:+UseG1GC -XX:MaxGCPauseMillis=200 /code/*.jar" ]
+USER root
+RUN  apk update && apk upgrade && apk add netcat-openbsd
+RUN mkdir -p /usr/local/event-app
+ADD build/libs/app-0.0.1-SNAPSHOT.jar /usr/local/event-app/app-0.0.1-SNAPSHOT.jar
+ADD run.sh run.sh
+RUN chmod +x run.sh
+CMD ./run.sh
