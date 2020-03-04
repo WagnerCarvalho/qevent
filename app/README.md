@@ -1,38 +1,3 @@
-# Getting Started
-
-Spring Boot + Kotlin + MongoDB rest API
-
-## Requires:
-```
-1. `docker-compose`
-2. `java 8 JDK` 
-```
-
-## Running mongo
-```
-# Run in project root
-$ docker-compose up -d
-```
-
-## Running app
-```
-# Run in project root
-$ ./gradlew bootRun -Dspring.profiles.active=local
-```
-
-## Running Test Unit
-```
-# Run in project root
-$ ./gradlew cleanTest test
-```
-
-## KtLint Validation
-```
-# Run in project root
-$ ./gradlew ktFormat
-$ ./gradlew ktLint
-```
-
 ## Endpoints
 Ping by Test Application
 ```
@@ -41,38 +6,32 @@ curl -v -X GET -H "Accept: application/json" -H "Content-Type: application/json"
 
 Create Event
 ```
-curl -v -X POST -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/create-event" -d'{JSON}'
+curl -v -X POST -H "Content-Type: application/json" -H "user_id: 123" "http://localhost:8080/v1/create-event" -d'{JSON}'
 {
-    "name": "Festa de 18 anos",
-    "description": "Festa de niver 18anos",
-    "email": "test@test.com.br",
-    "image_url": "http://test.test.com.br",
+    "id": "5e602c69fcf135193570f8a2",
+    "user_id": 123,
+    "name": "Eletro Dark",
+    "description": "TecknoHouse",
+    "email": "eletrodark@pvt.com.br",
+    "image_url": "http://s3-sa-east-1.amazonaws.com/qagile-menu-upload/a8253bfd-e766-4a1a-9b3b-b592f2db1ac1_bzum.jpg",
+    "version": 1,
     "place": {
-        "address": "Rua Pinheiros",
-        "neighborhood": "Luzia 13",
-        "city": "Diamantina",
-        "state": "MG",
+        "address": "Rua Mariporã",
+        "neighborhood": "Mariporã",
+        "city": "São Paulo",
+        "state": "SP",
         "location": {
-            "lat": -18.083333,
-            "lng": -43.633333
+            "lat": -23.3391186197085,
+            "lng": -47.34459991970849
         }
     }
 }
 ```
 
-Remove Event
-```
-curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/delete-event" -d'{JSON}'
-{
-	"id": "5e07c4ae55ec6f749ed9bcaa"
-}
-```
-
 Update Event
 ```
-curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/update-event" -d'{JSON}'
+curl -v -X PUT -H "Content-Type: application/json" -H "user_id: 123" "http://localhost:8080/v1/update-event/{id}" -d'{JSON}'
 {
-    "id": "5e10e3a17abf81169172fff5",
     "name": "Tribe 9 anos",
     "place": {
         "address": "Pedreira"
@@ -80,9 +39,14 @@ curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://
 }
 ```
 
+Remove Event
+```
+curl -v -X DELETE -H "Content-Type: application/json" -H "user_id: 123" "http://localhost:8080/v1/delete-event/{id}"
+```
+
 Create Menu
 ```
-curl -v -X POST -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/create-menu" -d'{JSON}'
+curl -v -X POST -H "Content-Type: application/json" -H "user_id: 123" "http://localhost:8080/v1/create-menu" -d'{JSON}'
 {
 	"event_id": "5e10e312125f2447ce744251",
 	"product": "Vodka Ciroc",
@@ -91,19 +55,15 @@ curl -v -X POST -H "Content-Type: application/json" -H "USER_ID: 123" "http://lo
 }
 ```
 
-Remove Menu
+Update Menu
 ```
-curl -v -X DELETE -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/delete-menu" -d'{JSON}'
+curl -v -X PUT -H "Content-Type: application/json" -H "user_id: 123" "http://localhost:8080/v1/update-menu/{id}" -d'{JSON}'
 {
-    "id": "5e1243c377ca0d1b398c4c34"
+    "description": "Catuaba Nacional"
 }
 ```
 
-Update Menu
+Remove Menu
 ```
-curl -v -X PUT -H "Content-Type: application/json" -H "USER_ID: 123" "http://localhost:8080/v1/update-menu" -d'{JSON}'
-{
-    "id": "5e35d5b589ccfa7e2208d926",
-    "description": "Catuaba Nacional"
-}
+curl -v -X DELETE -H "Content-Type: application/json" -H "user_id: 123" "http://localhost:8080/v1/delete-menu/{id}"
 ```
