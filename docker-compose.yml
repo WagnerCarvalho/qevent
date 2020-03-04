@@ -10,28 +10,28 @@ services:
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
-      - app
+      - event-app
 
   event-mongodb:
     container_name: event-mongodb
-    image: mongo
-    restart: always
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: mongo
-#      MONGO_INITDB_ROOT_PASSWORD: RA6XdvZLNp
+    image: mongo:3.4
+    volumes:
+      - ./_data:/data/db
     ports:
-      - "27017:27017"
-    volumes:
-      - /tmp/mongo_data:/data/db
+      - 12345:27017
+      - 23456:28017
+    command: ["mongod", "--rest"]
 
-  app:
+  event-app:
+    container_name: event-app
+    image: event-app
     build: ./app
-    working_dir: /app
-    volumes:
-      - ./app:/app
-      - ~/.m2:/root/.m2
-    expose:
-      - 8080
-    command: ./gradlew bootRun
+    environment:
+      - SERVER_PORT=8080
+      - MONGODB_URI=mongodb://event-mongodb:27017/qagile
+      - MONGODB_STATUS_HOST=event-mongodb
+      - MONGODB_STATUS_PORT=28017
+    ports:
+      - "8080:8080"
     depends_on:
       - event-mongodb
