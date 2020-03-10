@@ -4,7 +4,7 @@ Ping by Test Application
 curl -v -X GET -H "Accept: application/json" -H "Content-Type: application/json" "http://localhost:8080/ping"
 ```
 
-Create Image
+Create Event
 ```
 curl -v -X POST -H "Content-Type: application/json" -H "user_id: 123" "http://localhost:8080/v1/create-event" -d'{JSON}'
 {
