@@ -8,6 +8,6 @@ class PingHandlerController {
 
     @GetMapping("/ping")
     fun health(): String {
-        return "pong"
+        return "pong => qevent"
     }
 }
