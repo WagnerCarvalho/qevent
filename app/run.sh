@@ -15,4 +15,4 @@ echo "********************************************************"
 
 java -Dserver.port=$SERVER_PORT \
      -Dspring.data.mongodb.uri=$MONGODB_URI \
-     -jar /usr/local/event-app/app-0.0.1-SNAPSHOT.jar
+     -jar /usr/local/event-app/qevent-0.0.1-SNAPSHOT.jar
