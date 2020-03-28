@@ -5,6 +5,7 @@ import com.qagile.qevent.api.entities.EventLocation
 import com.qagile.qevent.api.entities.EventPlace
 import com.qagile.qevent.api.entities.request.CreateEventRequest
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
+import com.qagile.qevent.api.entities.EventStatus
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -35,7 +36,11 @@ data class Event(
     val version: Long = 1,
 
     @JsonProperty("place")
-    val place: EventPlace = EventPlace()
+    val place: EventPlace = EventPlace(),
+
+    @JsonProperty("event_status")
+    val eventStatus: EventStatus = EventStatus.PENDING
+
 ) {
     fun mergeDataCompany(newEvent: UpdateEventRequest, oldEvent: Event): Event {
 
@@ -56,7 +61,8 @@ data class Event(
                     lat = if (newEvent.place.location.lat == 0.0) oldEvent.place.location.lat else newEvent.place.location.lat,
                     lng = if (newEvent.place.location.lng == 0.0) oldEvent.place.location.lng else newEvent.place.location.lng
                 )
-            )
+            ),
+            eventStatus = oldEvent.eventStatus
         )
     }
 
