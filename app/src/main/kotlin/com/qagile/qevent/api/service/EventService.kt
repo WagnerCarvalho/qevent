@@ -6,16 +6,22 @@ import com.qagile.qevent.api.entities.request.CreateEventRequest
 import com.qagile.qevent.api.entities.request.DeleteRequest
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
 import com.qagile.qevent.api.entities.response.DeleteResponse
+import com.qagile.qevent.api.manager.exception.ManagerException
+import com.qagile.qevent.api.modules.qacquirer.entities.request.CreateUserEventRequest
+import com.qagile.qevent.api.modules.qacquirer.entities.response.CreateUserEventResponse
+import com.qagile.qevent.api.modules.qacquirer.service.UserEventService
 import com.qagile.qevent.api.repository.EventRepository
 import com.qagile.qevent.api.utils.ErrorCode
 import com.qagile.qevent.api.utils.SuccessCode
 import com.qagile.qevent.api.utils.Translator
 import com.qagile.qevent.api.utils.getError
+import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.Single.just
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class EventService {
@@ -23,6 +29,12 @@ class EventService {
 
     @Autowired
     private lateinit var eventRepository: EventRepository
+
+    @Autowired
+    private lateinit var userEventService: UserEventService
+
+    @Autowired
+    private lateinit var managerException: ManagerException
 
     fun checkUpdateEvent(updateEventRequest: UpdateEventRequest, userId: Long): Single<Event> {
         logger.info("Start checkUpdateEvent by userId: $userId with request: $updateEventRequest")
@@ -91,6 +103,23 @@ class EventService {
                 logger.error("Error removeEvent by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
+            }
+    }
+
+    fun createUserEvent(userId: Long, request: CreateUserEventRequest): Single<CreateUserEventResponse> {
+        logger.info("Start createUserEvent by userId: $userId with request: $request")
+
+        return findById(request.eventId)
+            .filter {
+                it.isPresent
+            }.flatMapSingle {
+                userEventService.createUserEvent(userId, request)
+            }.doOnSuccess {
+                logger.info("End createUserEvent by userId: $userId with response: $it")
+            }.doOnError {
+                logger.error("Error createUserEvent by userId: $userId with error: ${it.getError()}")
+            }.onErrorResumeNext {
+                Single.error(managerException.check(it, ErrorCode.USER_EVENT_NOT_CREATE))
             }
     }
 

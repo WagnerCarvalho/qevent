@@ -29,10 +29,10 @@ class UserEventServiceTest {
     private lateinit var quser: Quser
 
     val userId = 123L
-    val token = "AVBBB"
+    val authorizationId = "AVBBB"
     val acquirer = "mercadopago"
     val eventId = "1234567"
-    val createUserEventRequest = CreateUserEventRequest(token, acquirer, eventId)
+    val createUserEventRequest = CreateUserEventRequest(authorizationId, acquirer, eventId)
     val createUserEventResponse = CreateUserEventResponse(eventId, userId)
 
     private fun getHeader(userId: Long): Map<String, String>{

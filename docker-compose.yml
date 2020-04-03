@@ -1,17 +1,6 @@
 version: '3'
 services:
   event-nginx:
-    container_name: event-nginx
-    image: nginx:1.13
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - event-app
-
   event-mongodb:
     container_name: event-mongodb
     image: mongo:3.4
