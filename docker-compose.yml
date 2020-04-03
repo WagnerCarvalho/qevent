@@ -1,6 +1,5 @@
 version: '3'
 services:
-  event-nginx:
   event-mongodb:
     container_name: event-mongodb
     image: mongo:3.4
