@@ -5,7 +5,10 @@ import com.qagile.qevent.api.entities.request.CreateEventRequest
 import com.qagile.qevent.api.entities.request.DeleteRequest
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
 import com.qagile.qevent.api.entities.response.DeleteResponse
+import com.qagile.qevent.api.modules.qacquirer.entities.request.CreateUserEventRequest
+import com.qagile.qevent.api.modules.qacquirer.entities.response.CreateUserEventResponse
 import com.qagile.qevent.api.routers.EventRouter
+import com.qagile.qevent.api.routers.UserEventRouter
 import com.qagile.qevent.api.service.EventService
 import com.qagile.qevent.api.utils.toFutureResponse
 import java.util.concurrent.Future
@@ -51,5 +54,14 @@ class EventController {
     ): Future<Event> {
 
         return eventService.checkCreateEvent(createEventRequest, userId).toFutureResponse()
+    }
+
+    @PostMapping(UserEventRouter.CREATE_USER_EVENT_V1)
+    fun createUserEvent(
+        @RequestHeader("user_id") userId: Long,
+        @Valid @RequestBody request: CreateUserEventRequest
+    ): Future<CreateUserEventResponse> {
+
+        return eventService.createUserEvent(userId, request.update()).toFutureResponse()
     }
 }
