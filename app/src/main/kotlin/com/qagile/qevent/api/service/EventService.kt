@@ -15,13 +15,11 @@ import com.qagile.qevent.api.utils.ErrorCode
 import com.qagile.qevent.api.utils.SuccessCode
 import com.qagile.qevent.api.utils.Translator
 import com.qagile.qevent.api.utils.getError
-import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.Single.just
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class EventService {

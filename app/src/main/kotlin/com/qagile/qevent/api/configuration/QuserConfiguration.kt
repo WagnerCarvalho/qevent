@@ -2,6 +2,7 @@ package com.qagile.qevent.api.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.qagile.qevent.api.modules.qacquirer.gateway.Quser
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
-import java.util.concurrent.TimeUnit
 
 @Configuration
 class QuserConfiguration(
@@ -44,5 +44,4 @@ class QuserConfiguration(
 
     @Bean
     fun gatewayMercadoPago(retrofit: Retrofit): Quser = retrofit.create(Quser::class.java)
-
 }

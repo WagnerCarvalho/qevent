@@ -62,6 +62,6 @@ class EventController {
         @Valid @RequestBody request: CreateUserEventRequest
     ): Future<CreateUserEventResponse> {
 
-        return eventService.createUserEvent(userId, request).toFutureResponse()
+        return eventService.createUserEvent(userId, request.update()).toFutureResponse()
     }
 }

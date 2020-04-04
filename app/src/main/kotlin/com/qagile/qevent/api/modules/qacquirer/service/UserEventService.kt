@@ -28,7 +28,7 @@ class UserEventService {
             }
     }
 
-    private fun getHeader(userId: Long): Map<String, String>{
+    private fun getHeader(userId: Long): Map<String, String> {
 
         return mapOf("user_id" to userId.toString())
     }

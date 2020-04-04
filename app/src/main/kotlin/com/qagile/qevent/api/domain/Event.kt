@@ -3,9 +3,9 @@ package com.qagile.qevent.api.domain
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.qagile.qevent.api.entities.EventLocation
 import com.qagile.qevent.api.entities.EventPlace
+import com.qagile.qevent.api.entities.EventStatus
 import com.qagile.qevent.api.entities.request.CreateEventRequest
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
-import com.qagile.qevent.api.entities.EventStatus
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document

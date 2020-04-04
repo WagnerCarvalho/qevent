@@ -35,7 +35,7 @@ class UserEventServiceTest {
     val createUserEventRequest = CreateUserEventRequest(authorizationId, acquirer, eventId)
     val createUserEventResponse = CreateUserEventResponse(eventId, userId)
 
-    private fun getHeader(userId: Long): Map<String, String>{
+    private fun getHeader(userId: Long): Map<String, String> {
 
         return mapOf("user_id" to userId.toString())
     }

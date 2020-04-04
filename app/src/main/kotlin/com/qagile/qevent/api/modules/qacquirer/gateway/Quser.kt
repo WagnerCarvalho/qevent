@@ -14,5 +14,4 @@ interface Quser {
         @HeaderMap headers: Map<String, String>,
         @Body request: CreateUserEventRequest
     ): Single<CreateUserEventResponse>
-
 }

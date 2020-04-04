@@ -48,8 +48,11 @@ class EventControllerTest {
 
     val userId = 12L
     val eventId = "11"
+    val authorization = "123"
+    val acquirer = "mercadopago"
+    val grantType = "authorization_code"
     private var eventLocation = EventLocation(lat = -23.4954556, lng = -46.6406668)
-    private var createUserEventRequest = CreateUserEventRequest("123", "mercadopago", eventId)
+    private var createUserEventRequest = CreateUserEventRequest(authorization, acquirer, eventId, grantType)
     private var createUserEventResponse = CreateUserEventResponse(eventId, userId)
     private var eventAddress = EventPlace(address = "Rua Copacabana 160, Casa 08", neighborhood = "Santana",
         city = "São Paulo", state = "SP", location = eventLocation)
