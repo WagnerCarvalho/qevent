@@ -4,7 +4,11 @@ import com.qagile.qevent.api.domain.Event
 import com.qagile.qevent.api.entities.EventLocation
 import com.qagile.qevent.api.entities.EventPlace
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
+import com.qagile.qevent.api.modules.qacquirer.entities.request.CreateUserEventRequest
+import com.qagile.qevent.api.modules.qacquirer.entities.response.CreateUserEventResponse
+import com.qagile.qevent.api.modules.qacquirer.service.UserEventService
 import com.qagile.qevent.api.repository.EventRepository
+import io.reactivex.Single.just
 import java.util.Optional
 import org.junit.Assert
 import org.junit.Test
@@ -30,6 +34,10 @@ class EventServiceTest {
     @Autowired
     @MockBean
     private lateinit var eventRepository: EventRepository
+
+    @Autowired
+    @MockBean
+    private lateinit var userEventService: UserEventService
 
     private fun getEvent(name: String, description: String): Event {
         val eventLocation = EventLocation(lat = -23.4954556, lng = -46.6406668)
@@ -110,11 +118,25 @@ class EventServiceTest {
         val responseFindById: Optional<Event> = Optional.ofNullable(eventOld)
         `when`(eventRepository.findById(updateEventRequest.id)).thenReturn(responseFindById)
 
-        val aaa = Event().mergeDataCompany(updateEventRequest, eventOld)
+        val data = Event().mergeDataCompany(updateEventRequest, eventOld)
 
-        `when`(eventRepository.save(aaa)).thenReturn(eventNew)
+        `when`(eventRepository.save(data)).thenReturn(eventNew)
         val expected = eventService.checkUpdateEvent(updateEventRequest, userId).toFuture().get()
 
         Assert.assertEquals(true, expected.name == updateEventRequest.name)
+    }
+
+    @Test
+    fun test_createUserEvent() {
+        val event = getEvent("Amne", "festa do Eletro")
+        val responseFindById: Optional<Event> = Optional.ofNullable(event)
+        val createUserEvent = CreateUserEventRequest("AA!!", "mercadopago", event.id!!)
+        val createUserEventResponse = CreateUserEventResponse(event.id!!, event.userId)
+
+        `when`(eventRepository.findById(event.id!!)).thenReturn(responseFindById)
+        `when`(userEventService.createUserEvent(event.userId, createUserEvent)).thenReturn(just(createUserEventResponse))
+
+        val expected = eventService.createUserEvent(event.userId, createUserEvent).toFuture().get()
+        Assert.assertEquals(true, expected.eventId == event.id)
     }
 }

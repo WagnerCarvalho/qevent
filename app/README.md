@@ -67,3 +67,16 @@ Remove Menu
 ```
 curl -v -X DELETE -H "Content-Type: application/json" -H "user_id: 123" "http://localhost:8080/v1/delete-menu/{id}"
 ```
+
+Create User Event
+```
+curl -X POST \
+  http://localhost:8080/v1/event/create-user \
+  -H 'Content-Type: application/json' \
+  -H 'user_id: 123' \
+  -d '{
+    "authorization_id": "636523527hshwhqa6262",
+    "acquirer": "mercadopago",
+    "event_id": "5e8693acecc36974962c6e3d"
+}'
+```

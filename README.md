@@ -11,9 +11,9 @@ Spring Boot + Kotlin + MongoDB rest API
 2. `java 8 JDK` 
 ```
 
-## Running mongo
+## Running ALL (Application + Mongo + Nginx)
 ```
-# Run in project root
+# Run in qevent
 $ docker-compose up -d
 ```
 
