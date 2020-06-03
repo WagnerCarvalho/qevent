@@ -75,6 +75,7 @@ class MenuControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -108,6 +109,7 @@ class MenuControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -141,6 +143,7 @@ class MenuControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -173,6 +176,7 @@ class MenuControllerTest {
         this.mvc.perform(MockMvcRequestBuilders.put(MenuRouter.UPDATE_MENU_V1, "123")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
+            .header("apikey", "api-gateway")
             .header("user_id", userId))
             .andExpect(MockMvcResultMatchers.status().is4xxClientError)
     }

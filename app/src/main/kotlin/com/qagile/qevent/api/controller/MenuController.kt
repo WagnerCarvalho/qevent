@@ -29,7 +29,8 @@ class MenuController {
     fun updateMenu(
         @PathVariable id: String,
         @Valid @RequestBody updateMenuRequest: UpdateMenuRequest,
-        @RequestHeader(value = "user_id") userId: Long
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
     ): Future<Menu> {
 
         return menuService.checkUpdateMenu(updateMenuRequest.get(id), userId).toFutureResponse()
@@ -38,7 +39,8 @@ class MenuController {
     @PostMapping(MenuRouter.CREATE_MENU_V1)
     fun createMenu(
         @Valid @RequestBody createMenuRequest: CreateMenuRequest,
-        @RequestHeader(value = "user_id") userId: Long
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
     ): Future<Menu> {
 
         return menuService.checkCreateMenu(createMenuRequest, userId).toFutureResponse()
@@ -47,7 +49,8 @@ class MenuController {
     @DeleteMapping(MenuRouter.DELETE_MENU_V1)
     fun deleteMenu(
         @PathVariable id: String,
-        @RequestHeader(value = "user_id") userId: Long
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
     ): Future<DeleteResponse> {
 
         return menuService.removeMenu(DeleteRequest(id), userId).toFutureResponse()

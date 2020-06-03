@@ -1,7 +1,8 @@
 package com.qagile.qevent.api.routers
 
 object MenuRouter {
-    const val CREATE_MENU_V1 = "/v1/create-menu"
-    const val DELETE_MENU_V1 = "/v1/delete-menu/{id}"
-    const val UPDATE_MENU_V1 = "/v1/update-menu/{id}"
+    const val BASE_PATH = "/v1/menu"
+    const val CREATE_MENU_V1 = "$BASE_PATH/"
+    const val DELETE_MENU_V1 = "$BASE_PATH/{id}"
+    const val UPDATE_MENU_V1 = "$BASE_PATH/{id}"
 }
