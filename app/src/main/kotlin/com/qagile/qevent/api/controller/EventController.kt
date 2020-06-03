@@ -32,7 +32,8 @@ class EventController {
     fun updateEvent(
         @PathVariable id: String,
         @Valid @RequestBody updateEventRequest: UpdateEventRequest,
-        @RequestHeader(value = "user_id") userId: Long
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
     ): Future<Event> {
 
         return eventService.checkUpdateEvent(updateEventRequest.get(id), userId).toFutureResponse()
@@ -41,7 +42,8 @@ class EventController {
     @DeleteMapping(EventRouter.DELETE_EVENT_V1)
     fun removeEvent(
         @PathVariable id: String,
-        @RequestHeader(value = "user_id") userId: Long
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
     ): Future<DeleteResponse> {
 
         return eventService.checkRemoveEvent(DeleteRequest(id), userId).toFutureResponse()
@@ -50,7 +52,8 @@ class EventController {
     @PostMapping(EventRouter.CREATE_EVENT_V1)
     fun createEvent(
         @Valid @RequestBody createEventRequest: CreateEventRequest,
-        @RequestHeader(value = "user_id") userId: Long
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
     ): Future<Event> {
 
         return eventService.checkCreateEvent(createEventRequest, userId).toFutureResponse()
@@ -59,7 +62,8 @@ class EventController {
     @PostMapping(UserEventRouter.CREATE_USER_EVENT_V1)
     fun createUserEvent(
         @RequestHeader("user_id") userId: Long,
-        @Valid @RequestBody request: CreateUserEventRequest
+        @Valid @RequestBody request: CreateUserEventRequest,
+        @RequestHeader(value = "apikey") apiKey: String
     ): Future<CreateUserEventResponse> {
 
         return eventService.createUserEvent(userId, request.update()).toFutureResponse()
