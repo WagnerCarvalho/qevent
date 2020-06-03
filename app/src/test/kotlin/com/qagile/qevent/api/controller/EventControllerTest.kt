@@ -83,6 +83,7 @@ class EventControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -136,6 +137,7 @@ class EventControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -188,6 +190,7 @@ class EventControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -223,6 +226,7 @@ class EventControllerTest {
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(MockMvcResultMatchers.status().is4xxClientError)
     }
@@ -235,6 +239,7 @@ class EventControllerTest {
         this.mvc.perform(MockMvcRequestBuilders.post(UserEventRouter.CREATE_USER_EVENT_V1)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(createUserEventRequest)))
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
@@ -248,6 +253,7 @@ class EventControllerTest {
         this.mvc.perform(MockMvcRequestBuilders.post(UserEventRouter.CREATE_USER_EVENT_V1)
             .contentType(MediaType.APPLICATION_JSON)
             .header("user_id", userId)
+            .header("apikey", "api-gateway")
             .content(objectMapper.writeValueAsString(createUserEventRequest)))
             .andExpect(MockMvcResultMatchers.status().is4xxClientError)
     }
