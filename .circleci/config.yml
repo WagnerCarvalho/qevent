@@ -25,17 +25,17 @@ jobs:
       - checkout
 
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            - v1-dependencies-
+#       - restore_cache:
+#           keys:
+#             - v1-dependencies-{{ checksum "build.gradle" }}
+#             - v1-dependencies-
 
       - run: gradle dependencies
 
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+#       - save_cache:
+#           paths:
+#             - ~/.gradle
+#           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       - run:
           name: Test Unit
