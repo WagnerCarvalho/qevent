@@ -39,5 +39,5 @@ $ ./gradlew ktFormat
 $ ./gradlew ktLint
 ```
 
-## Documentação Swagger
+## Swagger
 > [Api Swagger](http://18.230.153.28:8000/qevent/swagger-ui.html) (Documentação disponível somente com aplicação em produção)
