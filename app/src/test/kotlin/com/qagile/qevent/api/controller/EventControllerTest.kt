@@ -51,6 +51,8 @@ class EventControllerTest {
     val authorization = "123"
     val acquirer = "mercadopago"
     val grantType = "authorization_code"
+    val apikey = "api-gateway"
+
     private var eventLocation = EventLocation(lat = -23.4954556, lng = -46.6406668)
     private var createUserEventRequest = CreateUserEventRequest(authorization, acquirer, eventId, grantType)
     private var createUserEventResponse = CreateUserEventResponse(eventId, userId)
@@ -234,7 +236,7 @@ class EventControllerTest {
     @Test
     @Throws(Exception::class)
     fun test_createUserEvent_success() {
-        Mockito.`when`(eventService.createUserEvent(userId, createUserEventRequest)).thenReturn(just(createUserEventResponse))
+        Mockito.`when`(eventService.createUserEvent(userId, createUserEventRequest, apikey)).thenReturn(just(createUserEventResponse))
 
         this.mvc.perform(MockMvcRequestBuilders.post(UserEventRouter.CREATE_USER_EVENT_V1)
             .contentType(MediaType.APPLICATION_JSON)
@@ -247,7 +249,7 @@ class EventControllerTest {
     @Test
     @Throws(Exception::class)
     fun test_createUserEvent_body_error() {
-        Mockito.`when`(eventService.createUserEvent(userId, createUserEventRequest)).thenReturn(just(createUserEventResponse))
+        Mockito.`when`(eventService.createUserEvent(userId, createUserEventRequest, apikey)).thenReturn(just(createUserEventResponse))
         val createUserEventRequest = CreateUserEventRequest(acquirer = "aaa")
 
         this.mvc.perform(MockMvcRequestBuilders.post(UserEventRouter.CREATE_USER_EVENT_V1)
@@ -261,7 +263,7 @@ class EventControllerTest {
     @Test
     @Throws(Exception::class)
     fun test_createUserEvent_header_error() {
-        Mockito.`when`(eventService.createUserEvent(userId, createUserEventRequest)).thenReturn(just(createUserEventResponse))
+        Mockito.`when`(eventService.createUserEvent(userId, createUserEventRequest, apikey)).thenReturn(just(createUserEventResponse))
 
         this.mvc.perform(MockMvcRequestBuilders.post(UserEventRouter.CREATE_USER_EVENT_V1)
             .contentType(MediaType.APPLICATION_JSON)

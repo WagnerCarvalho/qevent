@@ -66,6 +66,6 @@ class EventController {
         @RequestHeader(value = "apikey") apiKey: String
     ): Future<CreateUserEventResponse> {
 
-        return eventService.createUserEvent(userId, request.update()).toFutureResponse()
+        return eventService.createUserEvent(userId, request.update(), apiKey).toFutureResponse()
     }
 }

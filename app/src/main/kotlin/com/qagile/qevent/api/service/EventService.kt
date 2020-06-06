@@ -104,14 +104,14 @@ class EventService {
             }
     }
 
-    fun createUserEvent(userId: Long, request: CreateUserEventRequest): Single<CreateUserEventResponse> {
+    fun createUserEvent(userId: Long, request: CreateUserEventRequest, apiKey: String): Single<CreateUserEventResponse> {
         logger.info("Start createUserEvent by userId: $userId with request: $request")
 
         return findById(request.eventId)
             .filter {
                 it.isPresent
             }.flatMapSingle {
-                userEventService.createUserEvent(userId, request)
+                userEventService.createUserEvent(userId, request, apiKey)
             }.doOnSuccess {
                 logger.info("End createUserEvent by userId: $userId with response: $it")
             }.doOnError {

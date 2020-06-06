@@ -19,6 +19,7 @@ services:
       - MONGODB_URI=mongodb://event-mongodb:27017/qagile
       - MONGODB_STATUS_HOST=event-mongodb
       - MONGODB_STATUS_PORT=28017
+      - url_quser=${url_quser}
     ports:
       - "8080:8080"
     depends_on:
