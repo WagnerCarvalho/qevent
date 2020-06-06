@@ -34,17 +34,21 @@ class UserEventServiceTest {
     val eventId = "1234567"
     val createUserEventRequest = CreateUserEventRequest(authorizationId, acquirer, eventId)
     val createUserEventResponse = CreateUserEventResponse(eventId, userId)
+    val apikey = "api-gateway"
 
-    private fun getHeader(userId: Long): Map<String, String> {
+    private fun getHeader(userId: Long, apikey: String): Map<String, String> {
 
-        return mapOf("user_id" to userId.toString())
+        return mapOf(
+            "user_id" to userId.toString(),
+            "apikey" to apikey
+        )
     }
 
     @Test
     fun test_createUserEvent() {
-        Mockito.`when`(quser.createUserEvent(getHeader(userId), createUserEventRequest)).thenReturn(just((createUserEventResponse)))
+        Mockito.`when`(quser.createUserEvent(getHeader(userId, apikey), createUserEventRequest)).thenReturn(just((createUserEventResponse)))
 
-        val expected = userEventService.createUserEvent(userId, createUserEventRequest).toFuture().get()
+        val expected = userEventService.createUserEvent(userId, createUserEventRequest, apikey).toFuture().get()
         Assert.assertEquals(true, expected.eventId == eventId)
     }
 }

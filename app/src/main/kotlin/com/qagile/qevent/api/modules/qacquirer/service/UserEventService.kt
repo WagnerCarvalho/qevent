@@ -17,10 +17,10 @@ class UserEventService {
     @Autowired
     private lateinit var quser: Quser
 
-    fun createUserEvent(userId: Long, request: CreateUserEventRequest): Single<CreateUserEventResponse> {
+    fun createUserEvent(userId: Long, request: CreateUserEventRequest, apiKey: String): Single<CreateUserEventResponse> {
         logger.info("Start createUserEvent by userId: $userId with request: $request")
 
-        return quser.createUserEvent(getHeader(userId), request)
+        return quser.createUserEvent(getHeader(userId, apiKey), request)
             .doOnSuccess {
                 logger.info("End createUserEvent by userId: $userId with request: $request with response: $it")
             }.doOnError {
@@ -28,8 +28,11 @@ class UserEventService {
             }
     }
 
-    private fun getHeader(userId: Long): Map<String, String> {
+    private fun getHeader(userId: Long, apiKey: String): Map<String, String> {
 
-        return mapOf("user_id" to userId.toString())
+        return mapOf(
+            "user_id" to userId.toString(),
+            "apikey" to apiKey
+        )
     }
 }

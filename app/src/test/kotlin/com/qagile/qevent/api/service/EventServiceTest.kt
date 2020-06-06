@@ -39,6 +39,8 @@ class EventServiceTest {
     @MockBean
     private lateinit var userEventService: UserEventService
 
+    val apikey = "api-gateway"
+
     private fun getEvent(name: String, description: String): Event {
         val eventLocation = EventLocation(lat = -23.4954556, lng = -46.6406668)
         val eventAddress = EventPlace(address = "Rua Copacabana 160, Casa 08", neighborhood = "Santana",
@@ -134,9 +136,9 @@ class EventServiceTest {
         val createUserEventResponse = CreateUserEventResponse(event.id!!, event.userId)
 
         `when`(eventRepository.findById(event.id!!)).thenReturn(responseFindById)
-        `when`(userEventService.createUserEvent(event.userId, createUserEvent)).thenReturn(just(createUserEventResponse))
+        `when`(userEventService.createUserEvent(event.userId, createUserEvent, apikey)).thenReturn(just(createUserEventResponse))
 
-        val expected = eventService.createUserEvent(event.userId, createUserEvent).toFuture().get()
+        val expected = eventService.createUserEvent(event.userId, createUserEvent, apikey).toFuture().get()
         Assert.assertEquals(true, expected.eventId == event.id)
     }
 }

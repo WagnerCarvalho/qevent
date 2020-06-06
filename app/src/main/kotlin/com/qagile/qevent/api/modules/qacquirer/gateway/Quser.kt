@@ -9,7 +9,7 @@ import retrofit2.http.POST
 
 interface Quser {
 
-    @POST("/v1/user/create-event")
+    @POST("/quser/v1/user/create-event")
     fun createUserEvent(
         @HeaderMap headers: Map<String, String>,
         @Body request: CreateUserEventRequest
