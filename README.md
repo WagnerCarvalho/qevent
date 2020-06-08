@@ -40,4 +40,4 @@ $ ./gradlew ktLint
 ```
 
 ## Swagger
-> [Api Swagger](http://18.230.153.28:8000/qevent/swagger-ui.html) (Documentação disponível somente com aplicação em produção)
+> [Api Swagger](http://18.230.153.28:8000/qevent/swagger-ui.html)
