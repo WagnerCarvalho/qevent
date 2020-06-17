@@ -1,56 +1,95 @@
 # Java Gradle CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
-#
-version: 2
+
+version: 2.1
+executors:
+  docker-publisher:
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+      IMAGE_NAME: qagile/qevent
+    docker:
+      - image: circleci/buildpack-deps:stretch
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
     working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
-
     steps:
       - checkout
-
-      # Download and cache dependencies
-#       - restore_cache:
-#           keys:
-#             - v1-dependencies-{{ checksum "build.gradle" }}
-#             - v1-dependencies-
-
-      - run: gradle dependencies
-
-#       - save_cache:
-#           paths:
-#             - ~/.gradle
-#           key: v1-dependencies-{{ checksum "build.gradle" }}
-
+      - run: 
+          name: Check Dependencies
+          command: gradle dependencies
       - run:
           name: Test Unit
           path: app/
           command: ./gradlew cleanTest test
-
       - store_artifacts:
           path: app/build/reports/test
           destination: test/
-
       - run:
           name: Test KtLint
           path: app/
           command: ./gradlew ktLint
-          
       - store_artifacts:
           path: app/build/reports/kt
           destination: kt/
+  docker-build:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          path: app/
+          command: |
+            docker build -t $IMAGE_NAME:latest .
+      - run:
+          name: Archive Docker image
+          command: docker save -o image.tar $IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./image.tar
+  docker-publish:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            IMAGE_TAG="0.0.${CIRCLE_BUILD_NUM}"
+            docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
+            docker push $IMAGE_NAME:latest
+            docker push $IMAGE_NAME:$IMAGE_TAG
+workflows:
+  version: 2
+  build-master:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master
+      - docker-build:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+      - docker-publish:
+          requires:
+            - docker-build
+          filters:
+            branches:
+              only: 
+                - develop
+
