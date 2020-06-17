@@ -22,7 +22,6 @@ WORKDIR $APP_HOME
 
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/$ARTIFACT_DIR .
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/src/main/resources/application-local.properties .
-COPY --from=TEMP_BUILD_IMAGE $APP_HOME/src/main/resources/db .
 COPY --from=TEMP_BUILD_IMAGE $APP_HOME/run.sh .
 
 RUN chmod +x run.sh
