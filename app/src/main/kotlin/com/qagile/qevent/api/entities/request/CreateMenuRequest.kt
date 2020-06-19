@@ -24,6 +24,8 @@ data class CreateMenuRequest(
     val price: Double = "0.0".toDouble(),
 
     @JsonProperty("url")
-    val url: String = ""
+    val url: String = "",
 
+    @JsonProperty("quantity")
+    val quantity: Long = 0
 )

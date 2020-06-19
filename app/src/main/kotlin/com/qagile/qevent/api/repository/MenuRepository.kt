@@ -5,4 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface MenuRepository : MongoRepository <Menu, String>
+interface MenuRepository : MongoRepository <Menu, String> {
+
+    fun findByEventId(id: String): MutableList<Menu>
+}

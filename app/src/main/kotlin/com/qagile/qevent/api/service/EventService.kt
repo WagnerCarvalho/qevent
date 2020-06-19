@@ -121,6 +121,23 @@ class EventService {
             }
     }
 
+    fun checkEvent(id: String, userId: Long): Single<Event> {
+        logger.info("Start checkEvent by userId: $userId with id: $id")
+
+        return findById(id)
+            .filter {
+                it.isPresent
+            }.flatMapSingle {
+                just(it.get())
+            }.doOnSuccess {
+                logger.info("End checkEvent by userId: $userId with response: $it")
+            }.doOnError {
+                logger.error("Error checkEvent by userId: $userId with error: ${it.getError()}")
+            }.onErrorResumeNext {
+                Single.error(EventException("400", Translator.getMessage(ErrorCode.EVENT_DOES_NOT_EXIST)))
+            }
+    }
+
     fun findById(id: String) = just(eventRepository.findById(id))
 
     private fun save(event: Event) = just(eventRepository.save(event))
