@@ -12,6 +12,7 @@ import java.util.concurrent.Future
 import javax.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -24,6 +25,24 @@ class MenuController {
 
     @Autowired
     private lateinit var menuService: MenuService
+
+    @GetMapping(MenuRouter.GET_MENU_ALL_V1)
+    fun getMenuAll(
+        @PathVariable id: String,
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
+    ): Future<MutableList<Menu>> {
+        return menuService.checkMenuAll(id, userId).toFutureResponse()
+    }
+
+    @GetMapping(MenuRouter.GET_MENU_V1)
+    fun getMenu(
+        @PathVariable id: String,
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
+    ): Future<Menu> {
+        return menuService.checkMenu(id, userId).toFutureResponse()
+    }
 
     @PutMapping(MenuRouter.UPDATE_MENU_V1)
     fun updateMenu(

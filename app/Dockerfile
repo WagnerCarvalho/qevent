@@ -15,7 +15,6 @@ RUN ./gradlew build
 FROM openjdk:8
 USER root
 
-ENV MONGODB_URI=mongodb://event-mongodb:27017/qagile
 ENV APP_HOME=/usr/local/event-app
 ENV ARTIFACT_DIR=/build/libs
 WORKDIR $APP_HOME
@@ -28,5 +27,3 @@ RUN chmod +x run.sh
 CMD ./run.sh
 
 EXPOSE 8080
-
-#HEALTHCHECK CMD curl --fail http://localhost:8080/quser/ping || exit 1

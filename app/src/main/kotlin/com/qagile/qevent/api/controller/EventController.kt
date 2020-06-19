@@ -15,6 +15,7 @@ import java.util.concurrent.Future
 import javax.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -27,6 +28,15 @@ class EventController {
 
     @Autowired
     private lateinit var eventService: EventService
+
+    @GetMapping(EventRouter.GET_EVENT_V1)
+    fun getEvent(
+        @PathVariable id: String,
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
+    ): Future<Event> {
+        return eventService.checkEvent(id, userId).toFutureResponse()
+    }
 
     @PutMapping(EventRouter.UPDATE_EVENT_V1)
     fun updateEvent(
