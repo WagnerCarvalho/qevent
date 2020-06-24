@@ -29,6 +29,14 @@ class EventController {
     @Autowired
     private lateinit var eventService: EventService
 
+    @GetMapping(EventRouter.GET_EVENT_BY_USER_V1)
+    fun getEventByUser(
+        @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "apikey") apiKey: String
+    ): Future<MutableList<Event>> {
+        return eventService.checkEventByUser(userId).toFutureResponse()
+    }
+
     @GetMapping(EventRouter.GET_EVENT_V1)
     fun getEvent(
         @PathVariable id: String,
