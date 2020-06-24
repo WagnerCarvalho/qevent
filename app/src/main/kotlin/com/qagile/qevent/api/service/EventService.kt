@@ -52,6 +52,17 @@ class EventService {
         return saveEvent(Event().convertToEvents(createEventRequest, userId))
     }
 
+    fun checkEventByUser(userId: Long): Single<MutableList<Event>> {
+        logger.info("Start checkEventByUser by userId: $userId")
+
+        return getEventByUser(userId)
+            .doOnSuccess {
+                logger.info("End checkEventByUser by userId: $userId with response: $it")
+            }.doOnError {
+                logger.info("Error checkEventByUser by userId: $userId with error: ${it.getError()}")
+            }
+    }
+
     fun updateEvent(updateEventRequest: UpdateEventRequest, userId: Long): Single<Event> {
         logger.info("Start updateEvent by userId: $userId with request: $updateEventRequest")
 
@@ -143,4 +154,6 @@ class EventService {
     private fun save(event: Event) = just(eventRepository.save(event))
 
     private fun remove(event: Event) = just(eventRepository.deleteById(event.id.toString()))
+
+    private fun getEventByUser(userId: Long) = just(eventRepository.findByUserId(userId))
 }
