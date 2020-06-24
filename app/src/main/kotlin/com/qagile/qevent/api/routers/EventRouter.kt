@@ -6,5 +6,5 @@ object EventRouter {
     const val GET_EVENT_V1 = "$BASE_PATH/{id}"
     const val DELETE_EVENT_V1 = "$BASE_PATH/{id}"
     const val UPDATE_EVENT_V1 = "$BASE_PATH/{id}"
-    const val CREATE_USER_EVENT_V1 = "$BASE_PATH/create-user"
+    const val GET_EVENT_BY_USER_V1 = "$BASE_PATH/event-by-user"
 }
