@@ -2,6 +2,8 @@ package com.qagile.qevent.api.entities.request
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.qagile.qevent.api.entities.EventPlace
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 data class UpdateEventRequest(
 
@@ -21,7 +23,10 @@ data class UpdateEventRequest(
     var imageUrl: String = "",
 
     @JsonProperty("place")
-    var place: EventPlace = EventPlace()
+    var place: EventPlace = EventPlace(),
+
+    @JsonProperty("updated_at")
+    var updatedAt: LocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
 ) {
     fun get(id: String): UpdateEventRequest {
 
