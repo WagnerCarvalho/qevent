@@ -6,6 +6,8 @@ import com.qagile.qevent.api.entities.EventPlace
 import com.qagile.qevent.api.entities.EventStatus
 import com.qagile.qevent.api.entities.request.CreateEventRequest
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -15,31 +17,37 @@ data class Event(
 
     @Id
     @JsonProperty("id")
-    val id: String? = ObjectId().toHexString(),
+    var id: String? = ObjectId().toHexString(),
 
     @JsonProperty("user_id")
-    val userId: Long = 0,
+    var userId: Long = 0,
 
     @JsonProperty("name")
-    val name: String = "",
+    var name: String = "",
 
     @JsonProperty("description")
-    val description: String = "",
+    var description: String = "",
 
     @JsonProperty("email")
-    val email: String = "",
+    var email: String = "",
 
     @JsonProperty("image_url")
-    val imageUrl: String = "",
+    var imageUrl: String = "",
 
     @JsonProperty("version")
-    val version: Long = 1,
+    var version: Long = 1,
 
     @JsonProperty("place")
-    val place: EventPlace = EventPlace(),
+    var place: EventPlace = EventPlace(),
 
     @JsonProperty("event_status")
-    val eventStatus: EventStatus = EventStatus.PENDING
+    var eventStatus: EventStatus = EventStatus.PENDING,
+
+    @JsonProperty("created_at")
+    var createdAt: LocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
+
+    @JsonProperty("updated_at")
+    var updatedAt: LocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
 
 ) {
     fun mergeDataCompany(newEvent: UpdateEventRequest, oldEvent: Event): Event {
@@ -62,18 +70,19 @@ data class Event(
                     lng = if (newEvent.place.location.lng == 0.0) oldEvent.place.location.lng else newEvent.place.location.lng
                 )
             ),
-            eventStatus = oldEvent.eventStatus
+            eventStatus = oldEvent.eventStatus,
+            createdAt = oldEvent.createdAt
         )
     }
 
-    fun convertToEvents(createEventRequest: CreateEventRequest, userId: Long): Event {
+    fun convertToEvents(createEventRequest: CreateEventRequest, userId: Long, imageDefault: String): Event {
 
         return Event(
             userId = userId,
             name = createEventRequest.name,
             description = createEventRequest.description,
             email = createEventRequest.email,
-            imageUrl = createEventRequest.imageUrl,
+            imageUrl = if (createEventRequest.imageUrl == "") imageDefault else createEventRequest.imageUrl,
             place = EventPlace(
                 address = createEventRequest.place.address,
                 neighborhood = createEventRequest.place.neighborhood,

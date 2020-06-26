@@ -19,6 +19,7 @@ import io.reactivex.Single
 import io.reactivex.Single.just
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
@@ -33,6 +34,9 @@ class EventService {
 
     @Autowired
     private lateinit var managerException: ManagerException
+
+    @Value("\${image_default}")
+    lateinit var imageDefault: String
 
     fun checkUpdateEvent(updateEventRequest: UpdateEventRequest, userId: Long): Single<Event> {
         logger.info("Start checkUpdateEvent by userId: $userId with request: $updateEventRequest")
@@ -49,7 +53,7 @@ class EventService {
     fun checkCreateEvent(createEventRequest: CreateEventRequest, userId: Long): Single<Event> {
         logger.info("Start checkEvent by userId: $userId with request: $createEventRequest")
 
-        return saveEvent(Event().convertToEvents(createEventRequest, userId))
+        return saveEvent(Event().convertToEvents(createEventRequest, userId, imageDefault))
     }
 
     fun checkEventByUser(userId: Long): Single<MutableList<Event>> {
@@ -103,7 +107,7 @@ class EventService {
                 it.isPresent
             }.flatMapSingle {
                 remove(it.get()).map {
-                    DeleteResponse().getDeleteEventResponse(event.id, userId, Translator.getMessage(SuccessCode.EVENT_REMOVE))
+                    DeleteResponse().getDeleteEventResponse(event.id!!, userId, Translator.getMessage(SuccessCode.EVENT_REMOVE))
                 }
             }.doOnSuccess {
                 logger.info("End removeEvent by userId: $userId with response: $it")
@@ -149,6 +153,17 @@ class EventService {
             }
     }
 
+    fun checkEventAll(): Single<MutableList<Event>> {
+        logger.info("Start checkEventAll")
+
+        return getEventAll()
+            .doOnSuccess {
+                logger.info("End checkEventAll")
+            }.doOnError {
+                logger.error("End checkEventAll")
+            }
+    }
+
     fun findById(id: String) = just(eventRepository.findById(id))
 
     private fun save(event: Event) = just(eventRepository.save(event))
@@ -156,4 +171,6 @@ class EventService {
     private fun remove(event: Event) = just(eventRepository.deleteById(event.id.toString()))
 
     private fun getEventByUser(userId: Long) = just(eventRepository.findByUserId(userId))
+
+    private fun getEventAll() = just(eventRepository.findAll())
 }

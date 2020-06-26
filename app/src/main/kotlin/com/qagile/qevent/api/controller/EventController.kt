@@ -34,7 +34,16 @@ class EventController {
         @RequestHeader(value = "user_id") userId: Long,
         @RequestHeader(value = "apikey") apiKey: String
     ): Future<MutableList<Event>> {
+
         return eventService.checkEventByUser(userId).toFutureResponse()
+    }
+
+    @GetMapping(EventRouter.GET_EVENT_ALL_V1)
+    fun getEventAll(
+        @RequestHeader(value = "apikey") apiKey: String
+    ): Future<MutableList<Event>> {
+
+        return eventService.checkEventAll().toFutureResponse()
     }
 
     @GetMapping(EventRouter.GET_EVENT_V1)
@@ -43,6 +52,7 @@ class EventController {
         @RequestHeader(value = "user_id") userId: Long,
         @RequestHeader(value = "apikey") apiKey: String
     ): Future<Event> {
+
         return eventService.checkEvent(id, userId).toFutureResponse()
     }
 
