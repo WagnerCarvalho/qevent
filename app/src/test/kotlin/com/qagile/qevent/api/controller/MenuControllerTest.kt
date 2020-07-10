@@ -58,14 +58,15 @@ class MenuControllerTest {
             eventId = eventId,
             product = product,
             description = description,
-            price = price
+            price = price,
+            category = "food"
         )
     }
 
     @Test
     @Throws(Exception::class)
     fun test_create_menu_ok() {
-        val request = getMenuRequest("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10".toDouble())
+        val request = getMenuRequest("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10".toDouble() )
         val response = getMenu("5e124d06295a410254dd9cf9", "Cerveja", "Puro Malte", "10.00".toDouble())
         val userId = 123L
 

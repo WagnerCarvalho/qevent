@@ -13,19 +13,24 @@ data class CreateMenuRequest(
 
     @field:NotNull
     @field:NotEmpty
-    @JsonProperty("product")
-    val product: String = "",
+    @field:JsonProperty("product")
+    var product: String = "",
 
-    @JsonProperty("description")
-    val description: String = "",
+    @field:JsonProperty("description")
+    var description: String = "",
 
     @field:NotNull
-    @JsonProperty("price")
-    val price: Double = "0.0".toDouble(),
+    @field:JsonProperty("price")
+    var price: Double = "0.0".toDouble(),
 
-    @JsonProperty("url")
-    val url: String = "",
+    @field:JsonProperty("url")
+    var url: String = "",
 
-    @JsonProperty("quantity")
-    val quantity: Long = 0
+    @field:JsonProperty("quantity")
+    var quantity: Long = 0,
+
+    @field:NotNull
+    @field:NotEmpty
+    @field:JsonProperty("category")
+    var category: String = ""
 )

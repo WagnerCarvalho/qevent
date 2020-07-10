@@ -1,9 +1,11 @@
 package com.qagile.qevent.api.domain
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.qagile.qevent.api.entities.CategoryStatus
 import com.qagile.qevent.api.entities.ProductStatus
 import com.qagile.qevent.api.entities.request.CreateMenuRequest
 import com.qagile.qevent.api.entities.request.UpdateMenuRequest
+import io.reactivex.Single
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -34,7 +36,10 @@ data class Menu(
     val url: String = "",
 
     @JsonProperty("quantity")
-    val quantity: Long = 0
+    val quantity: Long = 0,
+
+    @JsonProperty("category")
+    val category: String = ""
 
 ) {
     fun convertToMenu(createMenuRequest: CreateMenuRequest): Menu {
@@ -45,7 +50,8 @@ data class Menu(
             description = createMenuRequest.description,
             price = createMenuRequest.price,
             url = createMenuRequest.url,
-            quantity = createMenuRequest.quantity
+            quantity = createMenuRequest.quantity,
+            category = getCategory(createMenuRequest.category)
         )
     }
 
@@ -59,17 +65,27 @@ data class Menu(
             status = if (newMenu.status == "") getStatus(oldMenu.description) else getStatus(newMenu.description),
             price = if (newMenu.price == "0.0".toDouble()) oldMenu.price else newMenu.price,
             url = if (newMenu.url == "") oldMenu.url else newMenu.url,
-            quantity = if (newMenu.quantity == 0.toLong()) oldMenu.quantity else newMenu.quantity
+            quantity = if (newMenu.quantity == 0.toLong()) oldMenu.quantity else newMenu.quantity,
+            category = if (newMenu.category == "") getCategory(oldMenu.category) else getCategory(newMenu.category)
         )
     }
 
-    fun getStatus(status: String): ProductStatus {
+    private fun getStatus(status: String): ProductStatus {
 
         return when (status) {
             ProductStatus.ACTIVE.name -> ProductStatus.ACTIVE
             ProductStatus.PENDING.name -> ProductStatus.PENDING
             ProductStatus.CANCELED.name -> ProductStatus.CANCELED
             else -> ProductStatus.PENDING
+        }
+    }
+
+    private fun getCategory(category: String): String {
+
+        return when (category.toUpperCase()) {
+            CategoryStatus.FOOD.name -> CategoryStatus.FOOD.name.toLowerCase()
+            CategoryStatus.DRINK.name -> CategoryStatus.DRINK.name.toLowerCase()
+            else -> CategoryStatus.OTHERS.name.toLowerCase()
         }
     }
 }
