@@ -23,7 +23,10 @@ data class UpdateMenuRequest(
     val url: String = "",
 
     @JsonProperty("quantity")
-    val quantity: Long = 0
+    val quantity: Long = 0,
+
+    @JsonProperty("category")
+    val category: String = ""
 
 ) {
     fun get(id: String): UpdateMenuRequest {
