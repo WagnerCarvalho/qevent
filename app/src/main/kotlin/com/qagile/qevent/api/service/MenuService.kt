@@ -7,6 +7,7 @@ import com.qagile.qevent.api.entities.request.CreateMenuRequest
 import com.qagile.qevent.api.entities.request.DeleteRequest
 import com.qagile.qevent.api.entities.request.UpdateMenuRequest
 import com.qagile.qevent.api.entities.response.DeleteResponse
+import com.qagile.qevent.api.entities.response.MenuResponse
 import com.qagile.qevent.api.repository.MenuRepository
 import com.qagile.qevent.api.utils.ErrorCode
 import com.qagile.qevent.api.utils.SuccessCode
@@ -99,12 +100,12 @@ class MenuService {
             }
     }
 
-    fun checkMenuAll(id: String, userId: Long): Single<MutableList<Menu>> {
+    fun checkMenuAll(id: String, userId: Long): Single<MenuResponse> {
         logger.info("Start checkMenuAll by userId: $userId with id: $id")
 
         return findByEventId(id)
             .flatMap {
-                just(it)
+                just(MenuResponse().get(it))
             }.doOnSuccess {
                 logger.info("End checkMenuAll by userId: $userId with response: $it")
             }.doOnError {
