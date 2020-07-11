@@ -4,13 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.qagile.qevent.api.domain.Menu
 import com.qagile.qevent.api.entities.CategoryStatus
 
-// data class MenuResponse (
-//
-//    @field:JsonProperty("data")
-//    var data: Category = Category()
-//
-// )
-
 data class MenuResponse(
 
     @field:JsonProperty("food")
