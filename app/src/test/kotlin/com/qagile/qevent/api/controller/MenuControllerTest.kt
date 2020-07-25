@@ -58,7 +58,8 @@ class MenuControllerTest {
             eventId = eventId,
             product = product,
             description = description,
-            price = price
+            price = price,
+            category = "food"
         )
     }
 

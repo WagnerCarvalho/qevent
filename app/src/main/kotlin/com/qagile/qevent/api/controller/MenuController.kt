@@ -5,6 +5,7 @@ import com.qagile.qevent.api.entities.request.CreateMenuRequest
 import com.qagile.qevent.api.entities.request.DeleteRequest
 import com.qagile.qevent.api.entities.request.UpdateMenuRequest
 import com.qagile.qevent.api.entities.response.DeleteResponse
+import com.qagile.qevent.api.entities.response.MenuResponse
 import com.qagile.qevent.api.routers.MenuRouter
 import com.qagile.qevent.api.service.MenuService
 import com.qagile.qevent.api.utils.toFutureResponse
@@ -31,7 +32,7 @@ class MenuController {
         @PathVariable id: String,
         @RequestHeader(value = "user_id") userId: Long,
         @RequestHeader(value = "apikey") apiKey: String
-    ): Future<MutableList<Menu>> {
+    ): Future<MenuResponse> {
         return menuService.checkMenuAll(id, userId).toFutureResponse()
     }
 
