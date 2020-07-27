@@ -25,6 +25,9 @@ data class UpdateEventRequest(
     @JsonProperty("place")
     var place: EventPlace = EventPlace(),
 
+    @JsonProperty("event_status")
+    var eventStatus: String = "",
+
     @JsonProperty("updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
 ) {
