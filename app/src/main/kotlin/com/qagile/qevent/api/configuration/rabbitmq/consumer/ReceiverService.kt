@@ -38,11 +38,11 @@ class ReceiverService {
 
     fun startEvent(event: QueueMessage): Future<Event>? {
         logger.info("ReceiverService - startEvent")
-        return eventService.updateEvent(UpdateEventRequest(id = "5f09f21fe0303208c934fbe4", eventStatus = event.statusMessage), event.userId).toFuture()
+        return eventService.updateEvent(UpdateEventRequest(id = event.eventId, eventStatus = event.statusMessage), event.userId).toFuture()
     }
 
     fun startEventAndGetLocation(event: QueueMessage): Future<Event>? {
         logger.info("ReceiverService - startEventAndGetLocation")
-        return eventService.updateEvent(UpdateEventRequest(id = "5f09f21fe0303208c934fbe4", eventStatus = event.statusMessage), event.userId).toFuture()
+        return eventService.updateEvent(UpdateEventRequest(id = event.eventId, eventStatus = event.statusMessage), event.userId).toFuture()
     }
 }
