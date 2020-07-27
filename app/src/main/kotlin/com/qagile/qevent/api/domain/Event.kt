@@ -70,7 +70,7 @@ data class Event(
                     lng = if (newEvent.place.location.lng == 0.0) oldEvent.place.location.lng else newEvent.place.location.lng
                 )
             ),
-            eventStatus = oldEvent.eventStatus,
+            eventStatus = if (newEvent.eventStatus == "") oldEvent.eventStatus else EventStatus.ACTIVE,
             createdAt = oldEvent.createdAt
         )
     }

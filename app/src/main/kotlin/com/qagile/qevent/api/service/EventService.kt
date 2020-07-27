@@ -77,7 +77,6 @@ class EventService {
                 save(Event().mergeDataCompany(updateEventRequest, it.get()))
             }.doOnSuccess {
                 logger.info("End updateEvent by userId: $userId with response: $it")
-                logger.info("End updateEvent by userId: $userId with request: $it to feed")
             }.doOnError {
                 logger.error("Error updateEvent by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {

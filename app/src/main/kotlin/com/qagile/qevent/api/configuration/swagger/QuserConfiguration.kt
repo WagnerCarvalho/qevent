@@ -1,4 +1,4 @@
-package com.qagile.qevent.api.configuration
+package com.qagile.qevent.api.configuration.swagger
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.qagile.qevent.api.modules.qacquirer.gateway.Quser
