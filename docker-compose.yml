@@ -22,6 +22,9 @@ services:
       - MONGODB_STATUS_HOST=event-mongodb
       - MONGODB_STATUS_PORT=28017
       - url_quser=${url_quser}
+      - RABBIT_MQ_HOST=${rabbit_mq_host}
+      - RABBIT_MQ_USERNAME=${rabbit_mq_username}
+      - RABBIT_MQ_PASSWORD=${rabbit_mq_password}"
     ports:
       - "8080:8080"
     depends_on:

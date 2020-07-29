@@ -9,4 +9,5 @@ interface EventRepository : MongoRepository <Event, String> {
 
     fun findByEmail(email: String): MutableList<Event>
     fun findByUserId(UserId: Long): MutableList<Event>
+    fun findByEventStatus(status: String): MutableList<Event>
 }
