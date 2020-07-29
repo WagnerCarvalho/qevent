@@ -1,6 +1,7 @@
 package com.qagile.qevent.api.service
 
 import com.qagile.qevent.api.domain.Event
+import com.qagile.qevent.api.entities.EventStatus
 import com.qagile.qevent.api.entities.exception.EventException
 import com.qagile.qevent.api.entities.request.CreateEventRequest
 import com.qagile.qevent.api.entities.request.DeleteRequest
@@ -155,7 +156,7 @@ class EventService {
     fun checkEventAll(): Single<MutableList<Event>> {
         logger.info("Start checkEventAll")
 
-        return getEventAll()
+        return getEventActive()
             .doOnSuccess {
                 logger.info("End checkEventAll")
             }.doOnError {
@@ -172,4 +173,6 @@ class EventService {
     private fun getEventByUser(userId: Long) = just(eventRepository.findByUserId(userId))
 
     private fun getEventAll() = just(eventRepository.findAll())
+
+    private fun getEventActive() = just(eventRepository.findByEventStatus(EventStatus.ACTIVE.name))
 }
