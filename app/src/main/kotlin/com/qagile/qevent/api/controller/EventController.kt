@@ -40,10 +40,11 @@ class EventController {
 
     @GetMapping(EventRouter.GET_EVENT_ALL_V1)
     fun getEventAll(
-        @RequestHeader(value = "apikey") apiKey: String
+        @RequestHeader(value = "apikey") apiKey: String,
+        @RequestHeader(value = "event_status") eventStatus: String
     ): Future<MutableList<Event>> {
 
-        return eventService.checkEventAll().toFutureResponse()
+        return eventService.checkEventAll(Event().getEventStatus(eventStatus)).toFutureResponse()
     }
 
     @GetMapping(EventRouter.GET_EVENT_V1)
