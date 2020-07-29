@@ -96,4 +96,12 @@ data class Event(
 
         )
     }
+
+    fun getEventStatus(eventStatus: String): EventStatus {
+
+        return when (eventStatus.toUpperCase()) {
+            EventStatus.ACTIVE.name -> EventStatus.ACTIVE
+            else -> EventStatus.PENDING
+        }
+    }
 }

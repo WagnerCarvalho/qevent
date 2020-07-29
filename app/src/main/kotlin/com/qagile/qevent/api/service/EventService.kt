@@ -153,10 +153,10 @@ class EventService {
             }
     }
 
-    fun checkEventAll(): Single<MutableList<Event>> {
+    fun checkEventAll(status: EventStatus): Single<MutableList<Event>> {
         logger.info("Start checkEventAll")
 
-        return getEventActive()
+        return getEventAll(status)
             .doOnSuccess {
                 logger.info("End checkEventAll")
             }.doOnError {
@@ -172,7 +172,5 @@ class EventService {
 
     private fun getEventByUser(userId: Long) = just(eventRepository.findByUserId(userId))
 
-    private fun getEventAll() = just(eventRepository.findAll())
-
-    private fun getEventActive() = just(eventRepository.findByEventStatus(EventStatus.ACTIVE.name))
+    private fun getEventAll(status: EventStatus) = just(eventRepository.findByEventStatus(status.name))
 }
