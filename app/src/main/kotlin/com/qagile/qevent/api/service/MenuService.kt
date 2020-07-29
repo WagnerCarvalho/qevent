@@ -1,5 +1,6 @@
 package com.qagile.qevent.api.service
 
+import com.qagile.qevent.api.configuration.rabbitmq.entities.UserAcquirer
 import com.qagile.qevent.api.domain.Menu
 import com.qagile.qevent.api.entities.exception.EventException
 import com.qagile.qevent.api.entities.exception.MenuException
@@ -28,6 +29,9 @@ class MenuService {
 
     @Autowired
     private lateinit var eventService: EventService
+
+    @Autowired
+    private lateinit var messageService: MessageService
 
     fun checkCreateMenu(createMenuRequest: CreateMenuRequest, userId: Long): Single<Menu> {
         logger.info("Start checkCreateMenu by userId: $userId with request: $createMenuRequest")
@@ -108,6 +112,7 @@ class MenuService {
                 just(MenuResponse().get(it))
             }.doOnSuccess {
                 logger.info("End checkMenuAll by userId: $userId with response: $it")
+                messageService.sendMessage(UserAcquirer(id, userId)).subscribe()
             }.doOnError {
                 logger.error("Error checkMenuAll by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
