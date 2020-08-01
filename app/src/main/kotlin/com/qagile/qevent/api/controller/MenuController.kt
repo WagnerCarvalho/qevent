@@ -31,9 +31,10 @@ class MenuController {
     fun getMenuAll(
         @PathVariable id: String,
         @RequestHeader(value = "user_id") userId: Long,
+        @RequestHeader(value = "type_profile") typeProfile: String?,
         @RequestHeader(value = "apikey") apiKey: String
     ): Future<MenuResponse> {
-        return menuService.checkMenuAll(id, userId).toFutureResponse()
+        return menuService.checkMenuAll(id, userId, typeProfile).toFutureResponse()
     }
 
     @GetMapping(MenuRouter.GET_MENU_V1)
