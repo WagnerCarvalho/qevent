@@ -1,4 +1,4 @@
-package com.qagile.qevent.api.configuration.rabbitmq
+package com.qagile.qevent.api.configuration.rabbitmq.entities
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
