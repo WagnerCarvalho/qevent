@@ -104,7 +104,7 @@ class MenuService {
             }
     }
 
-    fun checkMenuAll(id: String, userId: Long): Single<MenuResponse> {
+    fun checkMenuAll(id: String, userId: Long, typeProfile: String?): Single<MenuResponse> {
         logger.info("Start checkMenuAll by userId: $userId with id: $id")
 
         return findByEventId(id)
@@ -112,12 +112,18 @@ class MenuService {
                 just(MenuResponse().get(it))
             }.doOnSuccess {
                 logger.info("End checkMenuAll by userId: $userId with response: $it")
-                messageService.sendMessage(UserAcquirer(id, userId)).subscribe()
+                startMessage(id, userId, typeProfile)
             }.doOnError {
                 logger.error("Error checkMenuAll by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
                 Single.error(EventException("400", Translator.getMessage(ErrorCode.MENU_DOES_NOT_EXIST)))
             }
+    }
+
+    private fun startMessage(id: String, userId: Long, typeProfile: String?) {
+        if (typeProfile != null) {
+            messageService.sendMessage(UserAcquirer(id, userId)).subscribe()
+        }
     }
 
     fun checkMenu(id: String, userId: Long): Single<Menu> {
