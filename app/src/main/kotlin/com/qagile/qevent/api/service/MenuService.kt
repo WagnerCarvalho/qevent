@@ -112,8 +112,7 @@ class MenuService {
                 just(MenuResponse().get(it))
             }.doOnSuccess {
                 logger.info("End checkMenuAll by userId: $userId with response: $it")
-                if (typeProfile != null) { messageService.sendMessage(UserAcquirer(id, userId)).subscribe() 
-                }
+                if (typeProfile != null) { messageService.sendMessage(UserAcquirer(id, userId)).subscribe() }
             }.doOnError {
                 logger.error("Error checkMenuAll by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
