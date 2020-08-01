@@ -3,7 +3,7 @@ package com.qagile.qevent.api.configuration.rabbitmq.consumer
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.qagile.qevent.api.configuration.rabbitmq.QueueMessage
+import com.qagile.qevent.api.configuration.rabbitmq.entities.QueueMessage
 import com.qagile.qevent.api.configuration.rabbitmq.entities.RabbitConstants
 import com.qagile.qevent.api.domain.Event
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
