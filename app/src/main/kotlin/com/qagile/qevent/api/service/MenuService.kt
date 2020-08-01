@@ -111,7 +111,7 @@ class MenuService {
             .flatMap {
                 just(MenuResponse().get(it))
             }.doOnSuccess {
-                logger.info("End checkMenuAll by userId: $userId with response: $it")
+                logger.info("End checkMenuAll by userId: $userId with type_profile: $typeProfile and response: $it")
                 if (typeProfile != null) { messageService.sendMessage(UserAcquirer(id, userId)).subscribe() }
             }.doOnError {
                 logger.error("Error checkMenuAll by userId: $userId with error: ${it.getError()}")
