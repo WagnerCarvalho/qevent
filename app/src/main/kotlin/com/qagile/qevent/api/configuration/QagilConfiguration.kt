@@ -1,7 +1,8 @@
-package com.qagile.qevent.api.configuration.swagger
+package com.qagile.qevent.api.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.qagile.qevent.api.modules.qacquirer.gateway.Quser
+import com.qagile.qevent.api.modules.qacquirer.gateway.Qacquirer
+import com.qagile.qevent.api.modules.quser.gateway.Quser
 import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +14,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 
 @Configuration
-class QuserConfiguration(
+class QagilConfiguration(
     @Value("\${url_quser}") val url: String,
     @Value("\${time_out_quser}") val timeOut: Long
 ) {
@@ -43,5 +44,8 @@ class QuserConfiguration(
     }
 
     @Bean
-    fun gatewayMercadoPago(retrofit: Retrofit): Quser = retrofit.create(Quser::class.java)
+    fun gatewayQuser(retrofit: Retrofit): Quser = retrofit.create(Quser::class.java)
+
+    @Bean
+    fun gatewayQacquirer(retrofit: Retrofit): Qacquirer = retrofit.create(Qacquirer::class.java)
 }

@@ -8,9 +8,10 @@ import com.qagile.qevent.api.entities.request.DeleteRequest
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
 import com.qagile.qevent.api.entities.response.DeleteResponse
 import com.qagile.qevent.api.manager.exception.ManagerException
-import com.qagile.qevent.api.modules.qacquirer.entities.request.CreateUserEventRequest
-import com.qagile.qevent.api.modules.qacquirer.entities.response.CreateUserEventResponse
-import com.qagile.qevent.api.modules.qacquirer.service.UserEventService
+import com.qagile.qevent.api.modules.qacquirer.service.QacquirerService
+import com.qagile.qevent.api.modules.quser.entities.request.CreateUserEventRequest
+import com.qagile.qevent.api.modules.quser.entities.response.CreateUserEventResponse
+import com.qagile.qevent.api.modules.quser.service.UserEventService
 import com.qagile.qevent.api.repository.EventRepository
 import com.qagile.qevent.api.utils.ErrorCode
 import com.qagile.qevent.api.utils.SuccessCode
@@ -18,6 +19,7 @@ import com.qagile.qevent.api.utils.Translator
 import com.qagile.qevent.api.utils.getError
 import io.reactivex.Single
 import io.reactivex.Single.just
+import java.lang.Exception
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -35,6 +37,9 @@ class EventService {
 
     @Autowired
     private lateinit var managerException: ManagerException
+
+    @Autowired
+    private lateinit var qacquirerService: QacquirerService
 
     @Value("\${image_default}")
     lateinit var imageDefault: String
@@ -78,6 +83,7 @@ class EventService {
                 save(Event().mergeDataCompany(updateEventRequest, it.get()))
             }.doOnSuccess {
                 logger.info("End updateEvent by userId: $userId with response: $it")
+                getTestToken(updateEventRequest.id, userId.toString()).subscribe()
             }.doOnError {
                 logger.error("Error updateEvent by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
@@ -162,6 +168,20 @@ class EventService {
             }.doOnError {
                 logger.error("End checkEventAll")
             }
+    }
+
+    private fun getTestToken(eventId: String, userId: String): Single<Boolean> {
+        logger.info("EventService - getTestToken with eventId: - $eventId")
+        return Single.fromCallable {
+            try {
+                val response = qacquirerService.searchUser(eventId, userId)
+                logger.info("EventService - getTestToken with response: - $response")
+                true
+            } catch (exception: Exception) {
+                logger.error("EventService - getTestToken with exception: - ${exception.message}")
+                false
+            }
+        }
     }
 
     fun findById(id: String) = just(eventRepository.findById(id))

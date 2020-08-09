@@ -1,8 +1,8 @@
-package com.qagile.qevent.api.modules.qacquirer.service
+package com.qagile.qevent.api.modules.quser.service
 
-import com.qagile.qevent.api.modules.qacquirer.entities.request.CreateUserEventRequest
-import com.qagile.qevent.api.modules.qacquirer.entities.response.CreateUserEventResponse
-import com.qagile.qevent.api.modules.qacquirer.gateway.Quser
+import com.qagile.qevent.api.modules.quser.entities.request.CreateUserEventRequest
+import com.qagile.qevent.api.modules.quser.entities.response.CreateUserEventResponse
+import com.qagile.qevent.api.modules.quser.gateway.Quser
 import com.qagile.qevent.api.utils.getError
 import io.reactivex.Single
 import org.slf4j.LoggerFactory
