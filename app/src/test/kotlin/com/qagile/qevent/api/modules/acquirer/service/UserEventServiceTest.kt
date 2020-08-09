@@ -1,9 +1,9 @@
 package com.qagile.qevent.api.modules.acquirer.service
 
-import com.qagile.qevent.api.modules.qacquirer.entities.request.CreateUserEventRequest
-import com.qagile.qevent.api.modules.qacquirer.entities.response.CreateUserEventResponse
-import com.qagile.qevent.api.modules.qacquirer.gateway.Quser
-import com.qagile.qevent.api.modules.qacquirer.service.UserEventService
+import com.qagile.qevent.api.modules.quser.entities.request.CreateUserEventRequest
+import com.qagile.qevent.api.modules.quser.entities.response.CreateUserEventResponse
+import com.qagile.qevent.api.modules.quser.gateway.Quser
+import com.qagile.qevent.api.modules.quser.service.UserEventService
 import io.reactivex.Single.just
 import org.junit.Assert
 import org.junit.Test
