@@ -1,4 +1,4 @@
-package com.qagile.qevent.api.modules.qacquirer.entities.response
+package com.qagile.qevent.api.modules.quser.entities.response
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

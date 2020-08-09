@@ -4,9 +4,9 @@ import com.qagile.qevent.api.domain.Event
 import com.qagile.qevent.api.entities.EventLocation
 import com.qagile.qevent.api.entities.EventPlace
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
-import com.qagile.qevent.api.modules.qacquirer.entities.request.CreateUserEventRequest
-import com.qagile.qevent.api.modules.qacquirer.entities.response.CreateUserEventResponse
-import com.qagile.qevent.api.modules.qacquirer.service.UserEventService
+import com.qagile.qevent.api.modules.quser.entities.request.CreateUserEventRequest
+import com.qagile.qevent.api.modules.quser.entities.response.CreateUserEventResponse
+import com.qagile.qevent.api.modules.quser.service.UserEventService
 import com.qagile.qevent.api.repository.EventRepository
 import io.reactivex.Single.just
 import java.util.Optional

@@ -5,8 +5,8 @@ import com.qagile.qevent.api.entities.request.CreateEventRequest
 import com.qagile.qevent.api.entities.request.DeleteRequest
 import com.qagile.qevent.api.entities.request.UpdateEventRequest
 import com.qagile.qevent.api.entities.response.DeleteResponse
-import com.qagile.qevent.api.modules.qacquirer.entities.request.CreateUserEventRequest
-import com.qagile.qevent.api.modules.qacquirer.entities.response.CreateUserEventResponse
+import com.qagile.qevent.api.modules.quser.entities.request.CreateUserEventRequest
+import com.qagile.qevent.api.modules.quser.entities.response.CreateUserEventResponse
 import com.qagile.qevent.api.routers.EventRouter
 import com.qagile.qevent.api.routers.UserEventRouter
 import com.qagile.qevent.api.service.EventService
