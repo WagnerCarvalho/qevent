@@ -171,7 +171,7 @@ class EventService {
             }
     }
 
-    private fun getTestToken(eventId: String, userId: String): Single<Boolean> {
+    fun getTestToken(eventId: String, userId: String): Single<Boolean> {
         logger.info("EventService - getTestToken with eventId: - $eventId")
         return Single.fromCallable {
             try {
