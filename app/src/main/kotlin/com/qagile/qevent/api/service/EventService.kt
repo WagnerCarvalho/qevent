@@ -13,10 +13,7 @@ import com.qagile.qevent.api.modules.quser.entities.request.CreateUserEventReque
 import com.qagile.qevent.api.modules.quser.entities.response.CreateUserEventResponse
 import com.qagile.qevent.api.modules.quser.service.UserEventService
 import com.qagile.qevent.api.repository.EventRepository
-import com.qagile.qevent.api.utils.ErrorCode
-import com.qagile.qevent.api.utils.SuccessCode
-import com.qagile.qevent.api.utils.Translator
-import com.qagile.qevent.api.utils.getError
+import com.qagile.qevent.api.utils.*
 import io.reactivex.Single
 import io.reactivex.Single.just
 import java.lang.Exception
@@ -174,7 +171,7 @@ class EventService {
         logger.info("EventService - getTestToken with eventId: - $eventId")
         return Single.fromCallable {
             try {
-                val response = qacquirerService.searchUser(eventId, userId)
+                val response = qacquirerService.searchUser(eventId, userId).toFuture().objectToString()
                 logger.info("EventService - getTestToken with response: - $response")
                 true
             } catch (exception: Exception) {
