@@ -84,7 +84,6 @@ class EventService {
                 save(Event().mergeDataCompany(updateEventRequest, it.get()))
             }.doOnSuccess {
                 logger.info("End updateEvent by userId: $userId with response: $it")
-                getTestToken(updateEventRequest.id, userId.toString()).subscribe()
             }.doOnError {
                 logger.error("Error updateEvent by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
@@ -136,6 +135,7 @@ class EventService {
                 userEventService.createUserEvent(userId, request, apiKey)
             }.doOnSuccess {
                 logger.info("End createUserEvent by userId: $userId with response: $it")
+                getTestToken(request.eventId, userId.toString()).subscribe()
             }.doOnError {
                 logger.error("Error createUserEvent by userId: $userId with error: ${it.getError()}")
             }.onErrorResumeNext {
