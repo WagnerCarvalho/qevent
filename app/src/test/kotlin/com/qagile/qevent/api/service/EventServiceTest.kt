@@ -18,6 +18,7 @@ import org.mockito.Mockito.`mock`
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener
@@ -31,11 +32,11 @@ class EventServiceTest {
     private lateinit var eventService: EventService
 
     @Autowired
-//    @MockBean
+    @MockBean
     private lateinit var eventRepository: EventRepository
 
     @Autowired
-//    @MockBean
+    @MockBean
     private lateinit var userEventService: UserEventService
 
     val apikey = "api-gateway"
@@ -47,12 +48,6 @@ class EventServiceTest {
 
         return Event(userId = 1, name = name, description = description,
             email = "eletrosho@eletrosho.com.br", place = eventAddress, imageUrl = "test.com.br")
-    }
-
-    @Test
-    fun test_update_eve() {
-        val response = eventService.getTestToken("5f308239f2da7907a2610a6c", "11").toFuture()
-        val aaa = response
     }
 
     @Test
