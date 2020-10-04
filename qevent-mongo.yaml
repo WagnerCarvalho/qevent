@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mo-data-pv
+  labels:
+    type: local
+spec:
+  storageClassName: generic
+  capacity:
+    storage: 500Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/lib/mongo"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mo-data-pvc
+spec:
+  storageClassName: generic
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: event-mongodb
+  name: event-mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-mongodb
+  template:
+    metadata:
+      labels:
+        app: event-mongodb
+    spec:
+      containers:
+      - name: event-mongodb
+        volumeMounts:
+          - mountPath: /var/lib/mongo
+            name: mo-data
+        image: mongo:4.2
+        ports:
+        - containerPort: 27017
+      volumes:
+      - name: mo-data
+        persistentVolumeClaim:
+          claimName: mo-data-pvc
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: event-mongodb
+  name: event-mongodb
+spec:
+  type: ClusterIP
+  selector:
+    app: event-mongodb
+  ports:
+  - port: 27017
+    targetPort: 27017
